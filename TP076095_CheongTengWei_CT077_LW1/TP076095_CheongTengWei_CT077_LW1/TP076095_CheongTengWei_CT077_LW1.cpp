@@ -243,34 +243,206 @@ void deleteByValue(StudentArray& arr, const char* target) {
 
 }
 
+// ===================================================================================================================
+// Algorithm 3: Insertion Sort By Student ID
+// 
+// How it works:
+// 1. Loop through the array from the second element to the end of the array.
+// 2. Store the current student as key
+// 3. Compare the key's student ID with those before it.
+// 4. Shift students right if their ID is lexicographically greater than the key's ID.
+// 5. Place the key student in the correct position.
+// 6. Display success message after sorting.
+//
+// Big-O Notation: O(n) best case, O(n²) worst case 
+// Best case when the students are already sorted by student ID so no shifting is needed.
+// Worst case when the students are sorted in reverse order so every student ID needs to be compared and shifted.
+// ===================================================================================================================
+
+void insertionSortByID(StudentArray& arr) {
+	// loop the array from the second element
+	for (int i = 1; i < arr.count; i++) {
+		// store the current student as the key
+		Student key = arr.students[i];
+		int j = i - 1;
+
+		// compare the key student with the students ID before it
+		while (j >= 0 && strcmp(arr.students[j].studentID, key.studentID) > 0) {
+			// shift students whose ID is greater than key's ID to the right
+			arr.students[j + 1] = arr.students[j];
+			j--;
+
+		}
+
+		// place the key student in the correct position
+		arr.students[j + 1] = key;
+
+	}
+
+	// display success message
+	cout << "Students sorted by Student ID successfully." << endl;
+
+}
+
+// ===================================================================================================================
+// Algorithm 4: Insertion Sort By Name
+// 
+// How it works:
+// 1. Loop through the array from the second element to the end of the array.
+// 2. Store the current student as key
+// 3. Compare the key's full name with those before it.
+// 4. Shift students right if their name is lexicographically greater than the key's name.
+// 5. Place the key student in the correct position.
+// 6. Display success message after sorting.
+//
+// Big-O Notation: O(n) best case, O(n²) worst case 
+// Best case when the students are already sorted by student name so no shifting is needed.
+// Worst case when the students are sorted in reverse order so every student name needs to be compared and shifted.
+// ===================================================================================================================
+
+void insertionSortByName(StudentArray& arr) {
+	// loop the array from the second element
+	for (int i = 1; i < arr.count; i++) {
+		// store the current student as the key
+		Student key = arr.students[i];
+		int j = i - 1;
+
+		// compare the key student with the students name before it
+		while (j >= 0 && strcmp(arr.students[j].fullName, key.fullName) > 0) {
+			// shift students whose full name is greater than key's ID to the right
+			arr.students[j + 1] = arr.students[j];
+			j--;
+
+		}
+
+		// place the key student in the correct position
+		arr.students[j + 1] = key;
+
+	}
+
+	// display success message
+	cout << "Students sorted by name successfully." << endl;
+
+}
+
 
 
 // ===================================================================================================================
-// Algorithm 3: Binary Search
+// Algorithm 5: Insertion Sort By CGPA (Ascending)
+// 
+// How it works:
+// 1. Loop through the array from the second element to the end of the array.
+// 2. Store the current student as key
+// 3. Compare the key's cgpa with those before it.
+// 4. Shift the students to the right if their CGPA is greater than the key student's CGPA.
+// 5. Place the key student in the correct position.
+// 6. Display success message after sorting.
+//
+// Big-O Notation: O(n) best case, O(n²) worst case 
+// Best case when the students are already sorted by CGPA so no shifting is needed.
+// Worst case when the students are sorted in reverse order so every student name needs to be compared and shifted.
+// ===================================================================================================================
+
+void insertionSortAscending(StudentArray& arr) {
+	// loop the array from the second element
+	for (int i = 1; i < arr.count; i++) {
+		// store the current student as the key
+		Student key = arr.students[i];
+		int j = i - 1;
+
+		// compare the key student with the students cgpa before it
+		while (j >= 0 && arr.students[j].cgpa > key.cgpa) {
+			// shift students whose cgpa is greater than key's ID to the right
+			arr.students[j + 1] = arr.students[j];
+			j--;
+
+		}
+
+		// place the key student in the correct position
+		arr.students[j + 1] = key;
+
+	}
+
+	// display success message
+	cout << "Students sorted by CGPA (Ascending) successfully." << endl;
+
+}
+
+
+
+// ===================================================================================================================
+// Algorithm 6: Insertion Sort By CGPA (Descending)
+// 
+// How it works:
+// 1. Loop through the array from the second element to the end of the array.
+// 2. Store the current student as key
+// 3. Compare the key's cgpa with those before it.
+// 4. Shift the students to the right if their CGPA is lesser than the key student's CGPA.
+// 5. Place the key student in the correct position.
+// 6. Display success message after sorting.
+//
+// Big-O Notation: O(n) best case, O(n²) worst case 
+// Best case when the students are already sorted by CGPA so no shifting is needed.
+// Worst case when the students are sorted in ascending order so every student name needs to be compared and shifted.
+// ===================================================================================================================
+
+void insertionSortDescending(StudentArray& arr) {
+	// loop the array from the second element
+	for (int i = 1; i < arr.count; i++) {
+		// store the current student as the key
+		Student key = arr.students[i];
+		int j = i - 1;
+
+		// compare the key student with the students cgpa before it
+		while (j >= 0 && arr.students[j].cgpa < key.cgpa) {
+			// shift students whose cgpa is less than key's ID to the right
+			arr.students[j + 1] = arr.students[j];
+			j--;
+
+		}
+
+		// place the key student in the correct position
+		arr.students[j + 1] = key;
+
+	}
+
+	// display success message
+	cout << "Students sorted by CGPA (Descending) successfully." << endl;
+
+}
+
+
+
+// keep insertionSort() as an alias for ascending 
+// used internally by performance test
+void insertionSort(StudentArray& arr) {
+	insertionSortAscending(arr);
+
+}
+
+
+
+// ===================================================================================================================
+// Algorithm 7: Binary Search by Student ID
 // 
 // How it works:
 // 1. Define lower and upper positions of the search range.
 // 2. Loop until low index is less than or equal to high index.
 // 3. Calculate the middle position of the current search range. 
-// 4. Compare CGPA at the middle position with the target CGPA.
-// 5. Calculate the difference between the middle student's CGPA and the target CGPA.
-//    - If the difference is within 0.0001, the CGPA is considered a match.
-//      Move left to find the first occurrence of the matching CGPA and return the index.
-//	  - If the middle CGPA is smaller than the target, continue searching in the right half.
-//    - If the middle CGPA is larger than the target, continue searching in the left half.
+// 4. Compare student ID at the middle position with the target ID.
+//    - If they match (strcmp returns 0), walk left to find the first occurrence and return the index.
+//    - If the middle ID is less than the target, continue searching in the right half.
+//    - If the middle ID is greater than the target, continue searching in the left half.
 // 
-// Note: Direct equality (==) is avoided for CGPA comparison because CGPA is stored as a
-// double and floating point values can have tiny precision errors internally.
-// To fix the floating point issue, we can check the difference between two CGPA values;
-// If is smaller than 0.0001, it is close enough to be equal because CGPA only has 2 decimal places.
+// Prerequisite: Array must be sorted by Student ID (call insertionSortByID first).
 // 
 // Big-O Notation: O(log n) logarithmic time
-// This means that the time taken to search for a student by CGPA does not increase much as the number of student grows.
-// This is because binary search keeps dividing the search range in half, which reduces the reduces the number of 
-// comparisons needed to find the target CGPA.
+// This means that the time taken to search for a student by student ID does not increase much as the number of student grows.
+// This is because binary search keeps dividing the search range in half, which reduces the number of 
+// comparisons needed to find the target student ID.
 // ===================================================================================================================
 
-int binarySearch(const StudentArray& arr, double target) {
+int binarySearchByID(const StudentArray& arr, const char* target) {
 	// set low and high positions of the search 
 	int low = 0;
 	int high = arr.count - 1;
@@ -280,27 +452,20 @@ int binarySearch(const StudentArray& arr, double target) {
 		// calculate the middle position
 		int middle = (low + high) / 2; 
 
-		// // calculate the difference between the current student's CGPA and the target CGPA
-		double difference = arr.students[middle].cgpa - target;
+		int compare = strcmp(arr.students[middle].studentID, target);
 
-		// fix floating point issue: check if difference is close enough to zero
-		if (difference > -0.0001 && difference < 0.0001) {
-			// walk left to find the first occurence 
-			while (middle > 0 && arr.students[middle - 1].cgpa - target > -0.0001
-				&& arr.students[middle - 1].cgpa - target < 0.0001) {
+		if (compare == 0) {
+			// walk left to find the first occurrence
+			while (middle > 0 && strcmp(arr.students[middle - 1].studentID, target) == 0) {
 				middle--;
-
 			}
-			return middle; // return the index of first student with target CGPA
 
-		  // check if the middle student's CGPA is less than the target CGPA
-		} else if (arr.students[middle].cgpa < target) { 
-			low = middle + 1; // continue searching in the right half
-		  
-		  // check if the middle student's CGPA is greater than the target CGPA
+			return middle; // target found
+
+		} else if (compare < 0) {
+			low = middle + 1; // search right half
 		} else {
-			high = middle - 1; // continue searching in the left half
-
+			high = middle - 1; // search left half
 		}
 
 	}
@@ -312,45 +477,58 @@ int binarySearch(const StudentArray& arr, double target) {
 
 
 // ===================================================================================================================
-// Algorithm 4: Insertion Sort
+// Algorithm 8: Binary Search by Name
 // 
 // How it works:
-// 1. Loop through the array from the second element to the end of the array.
-// 2. Store the current student as key
-// 3. Compare the key with the students before it. 
-// 4. Shift the students to the right if their CGPA is greater than the key student's CGPA.
-// 5. Place the key student in the correct position.
-// 6. Display success message after sorting.
-//
-// Big-O Notation: O(n) best case, O(n²) worst case 
-// Best Case when the students are alreadt sorted by CGPA so no shifting is needed.
-// Worst case when the students are sorted in reverse order so every student needs to be compared and shifted.
+// 1. Define lower and upper positions of the search range.
+// 2. Loop until low index is less than or equal to high index.
+// 3. Calculate the middle position of the current search range. 
+// 4. Compare full name at the middle position with the target ID.
+//    - If they match, walk left to find the first occurrence and return the index.
+//    - If the middle name is less than the target, continue searching in the right half.
+//    - If the middle name is greater than the target, continue searching in the left half.
+// 
+// Prerequisite: Array must be sorted by name (call insertionSortByName first).
+// 
+// Big-O Notation: O(log n) logarithmic time
+// This means that the time taken to search for a student by name does not increase much as the number of student grows.
+// This is because binary search keeps dividing the search range in half, which reduces the number of 
+// comparisons needed to find the target student name.
 // ===================================================================================================================
+int binarySearchByName(const StudentArray& arr, const char* target) {
+	// set low and high positions of the search 
+	int low = 0;
+	int high = arr.count - 1;
 
-void insertionSort(StudentArray& arr) {
-	// loop the array from the second element
-	for (int i=1; i<arr.count; i++) {
-		// store the current student as the key
-		Student key = arr.students[i];
-		int j = i - 1; 
+	// loop until low index is less than or equal to high index
+	while (low <= high) {
+		// calculate the middle position
+		int middle = (low + high) / 2;
 
-		// compare the key student with the students before it
-		while (j >= 0 && arr.students[j].cgpa > key.cgpa) {
-			// shift the student to right if CGPA > key student
-			arr.students[j + 1] = arr.students[j];
-			j--;
+		int compare = strcmp(arr.students[middle].fullName, target);
+
+		if (compare == 0) {
+			// walk left to find the first occurrence
+			while (middle > 0 && strcmp(arr.students[middle - 1].fullName, target) == 0) {
+				middle--;
+			}
+
+			return middle; // target found
 
 		}
-
-		// place the key student in the correct position
-		arr.students[j + 1] = key; 
+		else if (compare < 0) {
+			low = middle + 1; // search right half
+		}
+		else {
+			high = middle - 1; // search left half
+		}
 
 	}
 
-	// display success message
-	cout << "Students sorted by CGPA successfully." << endl;
+	return -1; // target not found
 
 }
+
 
 
 // ===================================================================================================================
@@ -490,7 +668,7 @@ void runEdgeCaseTest() {
 	StudentArray* arr = new StudentArray();
 
 	cout << endl << "---- Edge Case 1: Search on empty array ----" << endl;
-	int result = binarySearch(*arr, 3.5);
+	int result = binarySearchByID(*arr, "TP000001");
 	if (result == -1)
 		cout << ">>> Test Passed. Binary search on empty array returned -1 as expected." << endl;
 
@@ -499,22 +677,31 @@ void runEdgeCaseTest() {
 	appendToEnd(*arr, student1);
 
 	cout << endl << "---- Edge Case 3: Insert CGPA = 0.00 (minimum boundary) ----" << endl;
-	Student student2 = { "TP000002", "Tetsing Student 2", "CT103", 1, 0.00, "011-69832913" };
+	Student student2 = { "TP000002", "Testing Student 2", "CT103", 1, 0.00, "011-69832913" };
 	appendToEnd(*arr, student2);
 
-	cout << endl << "---- Edge Case 4: Binary search for non-existent CGPA ----" << endl;
+
+	cout << endl << "---- Edge Case 4: Binary search ID for non-existent Student ID ----" << endl;
 	insertionSort(*arr);
-	int notFound = binarySearch(*arr, 6.70);
-	if (notFound == -1) {
-		cout << ">>> Test Passed. Search for non-existent CGPA returned -1 as expected." << endl;
+	int idNotFound = binarySearchByID(*arr, "TP999999");
+	if (idNotFound == -1) {
+		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
 
 	}
 
-	cout << endl << "---- Edge Case 5: Delete a record twice ----" << endl;
+	cout << endl << "---- Edge Case 5: Binary search by Name for non-existent student name ----" << endl;
+	insertionSort(*arr);
+	int nameNotFound = binarySearchByName(*arr, "Non-existent Student");
+	if (nameNotFound == -1) {
+		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
+
+	}
+
+	cout << endl << "---- Edge Case 6: Delete a record twice ----" << endl;
 	deleteByValue(*arr, "TP000002");  // first delete should succeed
 	deleteByValue(*arr, "TP000002");  // second delete should show error
 
-	cout << endl << "---- Edge Case 6: Insert 1 record, delete it, then display ----" << endl;
+	cout << endl << "---- Edge Case 7: Insert 1 record, delete it, then display ----" << endl;
 	Student student3 = { "TP000003", "Testing Student 3", "CT101", 1, 2.50, "011-3936706" };
 	appendToEnd(*arr, student3);
 	deleteByValue(*arr, "TP000003");
@@ -600,14 +787,14 @@ void runPerformanceTest() {
 	}
 
 	// ---- Display all Records ----
-	auto start = high_resolution_clock::now();
+	auto start1 = high_resolution_clock::now();
 
 	for (int i = 0; i < arr->count; i++) {
 		// traverse the array without printing
 		volatile char* id = (volatile char*)arr->students[i].studentID;
 	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>(end - start);
+	auto end1 = high_resolution_clock::now();
+	auto duration1 = duration_cast<microseconds>(end1 - start1);
 	//cout << "Display All: " << duration.count() << " microseconds" << endl;
 		
 	// ---- Append to End ----
@@ -626,57 +813,89 @@ void runPerformanceTest() {
 	};
 
 
-	auto start1 = high_resolution_clock::now(); // start time
+	auto start2 = high_resolution_clock::now(); // start time
 	for (int i = 0; i < 10; i++) {
 		appendToEnd(*arr, newStudent[i]); // perform append operation
 
 	} 
-	auto end1 = high_resolution_clock::now(); // end time
-	auto duration1 = duration_cast<microseconds>(end1 - start1); // calculate duration in microseconds
+	auto end2 = high_resolution_clock::now(); // end time
+	auto duration2 = duration_cast<microseconds>(end2 - start2); // calculate duration in microseconds
 	
 	// divide by 10 to get average time per insert
 	//cout << "Append to End  : " 
-	//	<< duration1.count() / 10.0
+	//	<< duration2.count() / 10.0
 	//	<< " microseconds (average of 10 inserts)" << endl;
 
 	// ---- Insertion Sort ----
-	auto start2 = high_resolution_clock::now(); // start time
+	auto start3 = high_resolution_clock::now(); // start time
 	insertionSort(*arr); // perform insertion sort operation
-	auto end2 = high_resolution_clock::now(); // end time
-	auto duration2 = duration_cast<microseconds>(end2 - start2); // calculate duration in microseconds
+	auto end3 = high_resolution_clock::now(); // end time
+	auto duration3 = duration_cast<microseconds>(end3 - start3); // calculate duration in microseconds
 		
 	//cout << "Insertion Sort: " 
-	//	<< duration2.count() 
+	//	<< duration3.count() 
 	//	<< " microseconds" << endl; // display execution time
 
-	// ---- Binary Search ----
-	// array is already sorted from the step above
+	// ---- Binary Search by Student ID----
+	insertionSortByID(*arr); // sort by student ID first
 
-	// search for 3 different CGPAs: first, middle and last student
-	double targets[3] = {
-		arr->students[0].cgpa,                  
-		arr->students[arr->count / 2].cgpa,     
-		arr->students[arr->count - 1].cgpa 
+	int idCount = arr->count; // snapshot count after sort
+	auto duration4 = duration_cast<microseconds>(microseconds(0));
+
+	if (idCount > 0) {
+		// search for 3 different student ids: first, middle and last student
+		const char* idTargets[3] = {
+			arr->students[0].studentID,
+			arr->students[idCount / 2].studentID,
+			arr->students[idCount - 1].studentID
+		};
+
+		auto start4 = high_resolution_clock::now(); // start time
+
+		// run each target 1000 times to get a measurable average time
+		for (int i = 0; i < 3; i++) {
+			for (int repeat = 0; repeat < 1000; repeat++) {
+				binarySearchByID(*arr, idTargets[i]);
+			}
+		}
+		auto end4 = high_resolution_clock::now(); // end time
+		duration4 = duration_cast<microseconds>(end4 - start4); // calculate duration in microseconds
+	}
+
+	// divide by 3000 to get average time per search (
+	// Note: 3 targets x 1000 runs each
+	//cout << "Binary Search  : " 
+	//	<< duration4.count() / 3000.0
+	//	<< " microseconds (average of 3 targets x 1000 runs)" << endl;
+
+	// ---- Binary Search by Name ----
+	insertionSortByName(*arr); // sort by name first
+
+	// search for 3 different names: first, middle and last student
+	const char* nameTargets[3] = {
+		arr->students[0].fullName,
+		arr->students[arr->count / 2].fullName,
+		arr->students[arr->count - 1].fullName
 
 	};
 
-	auto start3 = high_resolution_clock::now(); // start time
+	auto start5 = high_resolution_clock::now(); // start time
 
 	// run each target 1000 times to get a measurable average time
 	for (int i = 0; i < 3; i++) {
 		for (int repeat = 0; repeat < 1000; repeat++) {
-			binarySearch(*arr, targets[i]);
+			binarySearchByName(*arr, nameTargets[i]);
 
 		}
 	}
 
-	auto end3 = high_resolution_clock::now(); // end time
-	auto duration3 = duration_cast<microseconds>(end3 - start3); // calculate duration in microseconds
-		
+	auto end5 = high_resolution_clock::now(); // end time
+	auto duration5 = duration_cast<microseconds>(end5 - start5); // calculate duration in microseconds
+
 	// divide by 3000 to get average time per search (
 	// Note: 3 targets x 1000 runs each
 	//cout << "Binary Search  : " 
-	//	<< duration3.count() / 3000.0
+	//	<< duration5.count() / 3000.0
 	//	<< " microseconds (average of 3 targets x 1000 runs)" << endl;
 
 	// ---- Delete by Value ----
@@ -694,29 +913,30 @@ void runPerformanceTest() {
 		"TP075883"
 	};
 
-	auto start4 = high_resolution_clock::now(); // start time
+	auto start6 = high_resolution_clock::now(); // start time
 	for (int i = 0; i < 10; i++) {
 		deleteByValue(*arr, deleteStudent[i]); // perform delete operation
 
 	}
 
-	auto end4 = high_resolution_clock::now(); // end time
-	auto duration4 = duration_cast<microseconds>(end4 - start4); // calculate duration in microseconds
+	auto end6 = high_resolution_clock::now(); // end time
+	auto duration6 = duration_cast<microseconds>(end6 - start6); // calculate duration in microseconds
 
 	// divide by 10 to get average time per delete
 	//cout << "Delete by Value: "
-	//	<< duration4.count() / 10.0
+	//	<< duration6.count() / 10.0
 	//	<< " microseconds (average of 10 deletes)" << endl;
 
 	// display summary of performance test
 	cout << endl << "-------------------------------------------------------------------------------------------------------------------" << endl;
 	cout << "   SUMMARY OF PERFORMANCE TEST (IN MICROSECONDS)  " << endl;
 	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
-	cout << "Display All Records: " << duration.count() << " microseconds" << endl;
-	cout << "Append to End  : " << duration1.count() / 10.0 << " microseconds (average of 10 inserts)" << endl;
-	cout << "Insertion Sort: " << duration2.count() << " microseconds" << endl; 
-	cout << "Binary Search  : " << duration3.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
-	cout << "Delete by Value: " << duration4.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
+	cout << "Display All Records        : " << duration1.count() << " microseconds" << endl;
+	cout << "Append to End              : " << duration2.count() / 10.0 << " microseconds (average of 10 inserts)" << endl;
+	cout << "Insertion Sort             : " << duration3.count() << " microseconds" << endl; 
+	cout << "Binary Search by Student ID: " << duration4.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Binary Search by Name      : " << duration5.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Delete by Value            : " << duration6.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
 	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
 
 	delete arr; // free memory allocated for the array
@@ -742,7 +962,7 @@ void menu() {
 	cout << "2. Display all records" << endl;
 	cout << "3. Add a new student" << endl;
 	cout << "4. Sort students by CGPA" << endl;
-	cout << "5. Binary search by CGPA" << endl;
+	cout << "5. Binary search by Student ID or Name" << endl;
 	cout << "6. Delete a student by student ID" << endl;
 	cout << "7. Run performance test" << endl;
 	cout << "8. Exit program" << endl;
@@ -756,7 +976,7 @@ void menu() {
 // ===================================================================================================================
 int main() {
 	// create an instance of StudentArray to store student records
-	StudentArray* arr = new StudentArray(); 
+	StudentArray* arr = new StudentArray();
 	int choice = 0;
 
 	// loop until user chooses to exit
@@ -770,194 +990,279 @@ int main() {
 
 		switch (choice) {
 			// ---- Load data from CSV file ----
-			case 1: 
-			{
-				// display the dataset options 
-				cout << "Select a dataset to load:" << endl;
-				cout << "  1. students_500.csv" << endl;
-				cout << "  2. students_2000.csv" << endl;
-				cout << "  3. students_8000.csv" << endl;
-				cout << "  4. students_30000.csv" << endl;
+		case 1:
+		{
+			// display the dataset options 
+			cout << "Select a dataset to load:" << endl;
+			cout << "  1. students_500.csv" << endl;
+			cout << "  2. students_2000.csv" << endl;
+			cout << "  3. students_8000.csv" << endl;
+			cout << "  4. students_30000.csv" << endl;
 
-				int choice;
-				string filename;
-				
-				// map the choice to the corresponding dataset
-				while (true) {
-					cout << "Enter your choice (1-4): ";
-					cin >> choice;
-					cin.ignore(); // ignore newline character after integer input
+			int choice;
+			string filename;
 
-					if (choice == 1) {
-						filename = "students_500.csv";
-						break;
+			// map the choice to the corresponding dataset
+			while (true) {
+				cout << "Enter your choice (1-4): ";
+				cin >> choice;
+				cin.ignore(); // ignore newline character after integer input
 
-					} else if (choice == 2) {
-						filename = "students_2000.csv";
-						break;
-
-					} else if (choice == 3) {
-						filename = "students_8000.csv";
-						break;
-
-					} else if (choice == 4) {
-						filename = "students_30000.csv";
-						break;
-
-					} else {
-						cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
-
-					}
-				}
-
-				// load the dataset based on the choice
-				loadFromCSV(*arr, filename);
-				break;
-			}
-
-			// ---- Display all records ----
-			case 2:
-			{
-				displayAllRecords(*arr);
-				break;
-
-			}
-
-			// ---- Add a new student ----
-			case 3:
-			{
-				// prompt user to enter student details
-				Student newStudent;
-				cout << "  Student ID    : "; 
-				cin.getline(newStudent.studentID, sizeof(newStudent.studentID));
-
-				cout << "  Student Name  : "; 
-				cin.getline(newStudent.fullName, sizeof(newStudent.fullName));
-
-				cout << "  Programme     : "; 
-				cin.getline(newStudent.programme, sizeof(newStudent.programme));
-
-				cout << "  Year of Study : "; 
-				cin >> newStudent.yearOfStudy;
-
-				cout << "  CGPA          : "; 
-				cin >> newStudent.cgpa;
-				
-				cin.ignore(); // clear newline from input buffer
-
-				cout << "  Contact Number: "; 
-				cin.getline(newStudent.contactNumber, sizeof(newStudent.contactNumber));
-				
-				appendToEnd(*arr, newStudent);
-				break;
-
-			}
-
-			// ---- Sort students by CGPA ----
-			case 4:
-			{
-				// check if there are any student records to sort
-				if (arr->count == 0) {
-					cout << "Error: No student records to sort." << endl;
-					break; 
+				if (choice == 1) {
+					filename = "students_500.csv";
+					break;
 
 				}
+				else if (choice == 2) {
+					filename = "students_2000.csv";
+					break;
 
-				insertionSort(*arr);
+				}
+				else if (choice == 3) {
+					filename = "students_8000.csv";
+					break;
+
+				}
+				else if (choice == 4) {
+					filename = "students_30000.csv";
+					break;
+
+				}
+				else {
+					cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+
+				}
+			}
+
+			// load the dataset based on the choice
+			loadFromCSV(*arr, filename);
+			break;
+		}
+
+		// ---- Display all records ----
+		case 2:
+		{
+			displayAllRecords(*arr);
+			break;
+
+		}
+
+		// ---- Add a new student ----
+		case 3:
+		{
+			// prompt user to enter student details
+			Student newStudent;
+			cout << "  Student ID    : ";
+			cin.getline(newStudent.studentID, sizeof(newStudent.studentID));
+
+			cout << "  Student Name  : ";
+			cin.getline(newStudent.fullName, sizeof(newStudent.fullName));
+
+			cout << "  Programme     : ";
+			cin.getline(newStudent.programme, sizeof(newStudent.programme));
+
+			cout << "  Year of Study : ";
+			cin >> newStudent.yearOfStudy;
+
+			cout << "  CGPA          : ";
+			cin >> newStudent.cgpa;
+
+			cin.ignore(); // clear newline from input buffer
+
+			cout << "  Contact Number: ";
+			cin.getline(newStudent.contactNumber, sizeof(newStudent.contactNumber));
+
+			appendToEnd(*arr, newStudent);
+			break;
+
+		}
+
+		// ---- Sort students by CGPA ----
+		case 4:
+		{
+			// check if there are any student records to sort
+			if (arr->count == 0) {
+				cout << "Error: No student records to sort." << endl;
 				break;
 
 			}
 
-			// ---- Binary search by CGPA ----
-			case 5:
-			{
-				double target;
+			// prompt user to choose for ascending and descending
+			cout << "Sort Options:" << endl;
+			cout << "  1. Ascending " << endl;
+			cout << "  2. Descending " << endl;
 
-				// check if there are any student records to search
-				if (arr->count == 0) {
-					cout << "Error: No student records to search." << endl;
-					break; 
+			int sortChoice;
+			while (true) {
+				cout << "Enter your choice (1-2): ";
+				cin >> sortChoice;
+				cin.ignore();
+
+				if (sortChoice == 1 || sortChoice == 2) {
+					break;
 
 				}
 
-				// make sure the array is sorted before performing binary search
-				cout << "Note: The array will be sorted by CGPA before performing binary search." << endl;
-				insertionSort(*arr);
+				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
+			}
 
-				// prompt user to enter target CGPA
-				cout << "Enter CGPA to search: ";
-				cin >> target;
-				cin.ignore(); // ignore newline character after double input
+			if (sortChoice == 1) {
+				insertionSortAscending(*arr);
 
-				// perform binary search 
-				int index = binarySearch(*arr, target);
+			}
+			else {
+				insertionSortDescending(*arr);
 
-				// check if binary search successfully found a matching CGPA
+			}
+
+			break;
+
+		}
+
+		// ---- Binary search by Student ID or Name ----
+		case 5:
+		{
+			double target;
+
+			// check if there are any student records to search
+			if (arr->count == 0) {
+				cout << "Error: No student records to search." << endl;
+				break;
+
+			}
+
+			// prompt user to choose search type
+			cout << "Binary Search Options: " << endl;
+			cout << "1. Search by Student ID" << endl;
+			cout << "2. Search by Name" << endl;
+
+			int searchChoice;
+			while (true) {
+				cout << "Enter your choice (1-2): ";
+				cin >> searchChoice;
+				cin.ignore();
+
+				if (searchChoice == 1 || searchChoice == 2) {
+					break;
+
+				}
+
+				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
+			}
+
+			if (searchChoice == 1) {
+				// ---- Binary Search by Student ID ----
+				char targetID[20];
+				cout << ">>> Note: The array will be sorted by Student ID before performing binary search." << endl;
+				insertionSortByID(*arr);
+
+				cout << "Enter Student ID to search: ";
+				cin.getline(targetID, sizeof(targetID));
+
+				int index = binarySearchByID(*arr, targetID);
+
 				if (index != -1) {
 					cout << "First match at index " << index << ":" << endl;
 
-					// check for other students with the same CGPA by moving right
+					// display all students with the same Student ID
 					for (int i = index; i < arr->count; i++) {
-						// calculate the difference between the current student's CGPA and the target CGPA
-						double difference = arr->students[i].cgpa - target;
-
-						// check if the difference is within 0.0001 to handle floating point precision issues
-						if (difference > -0.0001 && difference < 0.0001) {
+						if (strcmp(arr->students[i].studentID, targetID) == 0) {
 							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
-							displayStudentInfo(arr->students[i]); // display student details
+							displayStudentInfo(arr->students[i]);
 
-						} else {
-							break; // stop when CGPA no longer matches the target
+						}
+						else {
+							break; // stop when ID no longer matches
 
 						}
 					}
 
-				} else {
-					cout << "Error: No student found with CGPA " << target << endl;
+				}
+				else {
+					cout << ">>> Error: No student found with Student ID " << targetID << endl;
 					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
 
 				}
 
-				break;
+			}
+			else {
+				// ---- Binary Search by Name ----
+				char targetName[50];
+				cout << ">>> Note: The array will be sorted by Name before performing binary search." << endl;
+				insertionSortByName(*arr);
+
+				cout << "Enter full name: ";
+				cin.getline(targetName, sizeof(targetName));
+
+				int index = binarySearchByName(*arr, targetName);
+
+				if (index != -1) {
+					cout << "First match at index " << index << ":" << endl;
+
+					// display all students with the same name
+					for (int i = index; i < arr->count; i++) {
+						if (strcmp(arr->students[i].fullName, targetName) == 0) {
+							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							displayStudentInfo(arr->students[i]);
+
+						}
+						else {
+							break; // stop when name no longer matches
+
+						}
+					}
+
+				}
+				else {
+					cout << ">>> Error: No student found with name " << targetName << endl;
+					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+
+				}
 
 			}
 
-			// ---- Delete a student by student ID ----
-			case 6:
-			{
-				char target[20];
-				cout << "Enter student ID to delete: ";
-				cin.getline(target, sizeof(target));
-				deleteByValue(*arr, target);
-				break;
 
-			}
-				
-			// ---- Run performance test ----
-			case 7:
-			{
-				runPerformanceTest();
-				break;
 
-			}
+			break;
 
-			// ---- Exit program ----
-			case 8:
-			{
-				cout << "Thank you for using the Student Record Management System!" << endl;
-				cout << "Exiting program..." << endl;
-				return 0; // exit the program
+		}
 
-			}
+		// ---- Delete a student by student ID ----
+		case 6:
+		{
+			char target[20];
+			cout << "Enter student ID to delete: ";
+			cin.getline(target, sizeof(target));
+			deleteByValue(*arr, target);
+			break;
 
-			// ---- Invalid option ----
-			default:
-			{
-				cout << "Error: Invalid option. Please select a number between 1 and 8." << endl;
-				break;
+		}
 
-			}
-				
+		// ---- Run performance test ----
+		case 7:
+		{
+			runPerformanceTest();
+			break;
+
+		}
+
+		// ---- Exit program ----
+		case 8:
+		{
+			cout << "Thank you for using the Student Record Management System!" << endl;
+			cout << "Exiting program..." << endl;
+			return 0; // exit the program
+
+		}
+
+		// ---- Invalid option ----
+		default:
+		{
+			cout << "Error: Invalid option. Please select a number between 1 and 8." << endl;
+			break;
+
+		}
+
 		}
 	}
 }
