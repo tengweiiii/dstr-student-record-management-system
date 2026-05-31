@@ -59,11 +59,11 @@ MENU OPTIONS
 
 IMPORTANT NOTES
 --------------- 
-Always load a dataset (Option 1: Load a dataset from .csv file) before using any other options.
-Binary Search (Option 5: Binary search by CGPA) will automatically sort the array before searching.
-Performance Test (Option 7: Run performance test) loads its own separate copy of the dataset so it will not affect the records currently loaded in the system
-CGPA must be between 0.0 and 4.0
-Duplicate Student IDs are not allowed
+1. Always load a dataset (Option 1: Load a dataset from .csv file) before using any other options.
+2. Binary Search (Option 5: Binary search by CGPA) will automatically sort the array before searching.
+3. Performance Test (Option 7: Run performance test) loads its own separate copy of the dataset so it will not affect the records currently loaded in the system
+4. CGPA must be between 0.0 and 4.0
+5. Duplicate Student IDs are not allowed
 
 DATASET FILES
 -------------
