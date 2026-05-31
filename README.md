@@ -2,10 +2,15 @@
 ===========================================================================================
 
 CT077-3-2-DSTR (Data Structures) | Lab Work #1
+
 Student Record Management System
+
 Intake Code: APD2F2511CS(DA)
+
 Lecturer Name: Dr. Masrina Akmal Binti Salleh
+
 Student Name: Cheong Teng Wei
+
 TP Number: TP076095
 
 Data Structure Used: Array
