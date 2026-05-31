@@ -67,10 +67,10 @@ IMPORTANT NOTES
 
 DATASET FILES
 -------------
-students_500.csv    —  500 records  (~25 KB)
-students_2000.csv   — 2000 records  (~100 KB)
-students_8000.csv   — 8000 records  (~400 KB)
-students_30000.csv  — 30000 records (~1.5 MB)
+- students_500.csv    —  500 records  (~25 KB)
+- students_2000.csv   — 2000 records  (~100 KB)
+- students_8000.csv   — 8000 records  (~400 KB)
+- students_30000.csv  — 30000 records (~1.5 MB)
 
 ===========================================================================================
 
