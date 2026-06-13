@@ -11,11 +11,16 @@
  //
  //Data Structure Used: Array
  //Algorithms Used: 
- //1. Append to End
- //2. Delete by Value
- //3. Update by Value
- //4. Binary Search
- //5. Insertion Sort
+ //1.  Append to End
+ //2.  Delete by Value
+ //3.  Insertion Sort by Student ID
+ //4.  Insertion Sort by Name
+ //5.  Insertion Sort by CGPA Ascending
+ //6.  Insertion Sort by CGPA Descending
+ //7.  Binary Search by Student ID
+ //8.  Binary Search by Name
+ //9.  Linear Search by Student ID
+ //10. Linear Search by Name
  //===================================================================================================================
 
 #define _CRT_SECURE_NO_WARNINGS // removes the warning of strcpy
@@ -366,6 +371,7 @@ void insertionSortAscending(StudentArray& arr) {
 	// display success message
 	cout << "Students sorted by CGPA (Ascending) successfully." << endl;
 
+
 }
 
 
@@ -521,6 +527,70 @@ int binarySearchByName(const StudentArray& arr, const char* target) {
 		}
 		else {
 			high = middle - 1; // search left half
+		}
+
+	}
+
+	return -1; // target not found
+
+}
+
+
+
+// ===================================================================================================================
+// Algorithm 9: Linear Search by Student ID
+//
+// How it works:
+// 1. Loop through the array from the first element to the last.
+// 2. Compare each student's ID with the target ID.
+//    - If they match , return the index immediately.
+// 3. - If the loop finishes without finding a match, return -1.
+//
+// Prerequisite: None. Array does not need to be sorted.
+//
+// Big-O Notation: O(n) linear time
+// This means the time taken grows proportionally with the number of students.
+// In the worst case, the target is at the last position or does not exist,
+// so every record must be checked before a conclusion can be made.
+// ===================================================================================================================
+int linearSearchByID(const StudentArray& arr, const char* target) {
+	// loop through every student in the array
+	for (int i = 0; i < arr.count; i++) {
+		// compare current student ID with target ID
+		if (strcmp(arr.students[i].studentID, target) == 0) {
+			return i; // target found
+
+		}
+
+	}
+
+	return -1; // target not found
+
+}
+
+// ===================================================================================================================
+// Algorithm 10: Linear Search by Name
+//
+// How it works:
+// 1. Loop through the array from the first element to the last.
+// 2. Compare each student's full name with the target name.
+//    - If they match , return the index immediately.
+// 3. If the loop finishes without finding a match, return -1.
+//
+// Prerequisite: None. Array does not need to be sorted.
+//
+// Big-O Notation: O(n) linear time
+// This means the time taken grows proportionally with the number of students.
+// In the worst case, the target is at the last position or does not exist,
+// so every record must be checked before a conclusion can be made.
+// ===================================================================================================================
+
+int linearSearchByName(const StudentArray& arr, const char* target) {
+	// loop through every student in the array
+	for (int i = 0; i < arr.count; i++) {
+		if (strcmp(arr.students[i].fullName, target) == 0) {
+			return i; // target found
+
 		}
 
 	}
@@ -721,9 +791,10 @@ void runEdgeCaseTest() {
 // runPerformanceTest() function:
 // This function is used to measure the execution time of the four operations:
 // - Append to End 
-// - Delete by Value
-// - Binary Search 
+// - Linear Search
 // - Insertion Sort
+// - Binary Search 
+// - Delete by Value
 // ===================================================================================================================
 
 void runPerformanceTest() {
@@ -750,20 +821,26 @@ void runPerformanceTest() {
 	cout << "  2. students_2000.csv" << endl;
 	cout << "  3. students_8000.csv" << endl;
 	cout << "  4. students_30000.csv" << endl;
+	cout << "  5. Back to main menu" << endl;
 
 	int choice;
 
 	while (true) {
-		cout << "Enter your choice (1-4): ";
+		cout << "Enter your choice (1-5): ";
 		cin >> choice;
 		cin.ignore();
 
-		if (choice >= 1 && choice <= 4) {
+		if (choice >= 1 && choice <= 5) {
 			break;
 		}
 
-		cout << "Error: Invalid choice. Please enter a number between 1 and 4." << endl;
+		cout << "Error: Invalid choice. Please enter a number between 1 and 5." << endl;
 
+	}
+
+	if (choice == 5) {
+		cout << "Returning to main menu..." << endl;
+		return; // exit runPerformanceTest() and return to main menu
 	}
 
 	// map choice to the correct file
@@ -795,7 +872,6 @@ void runPerformanceTest() {
 	}
 	auto end1 = high_resolution_clock::now();
 	auto duration1 = duration_cast<microseconds>(end1 - start1);
-	//cout << "Display All: " << duration.count() << " microseconds" << endl;
 		
 	// ---- Append to End ----
 	// insert 10 new records
@@ -820,34 +896,43 @@ void runPerformanceTest() {
 	} 
 	auto end2 = high_resolution_clock::now(); // end time
 	auto duration2 = duration_cast<microseconds>(end2 - start2); // calculate duration in microseconds
-	
-	// divide by 10 to get average time per insert
-	//cout << "Append to End  : " 
-	//	<< duration2.count() / 10.0
-	//	<< " microseconds (average of 10 inserts)" << endl;
 
-	// ---- Insertion Sort ----
-	auto start3 = high_resolution_clock::now(); // start time
-	insertionSort(*arr); // perform insertion sort operation
-	auto end3 = high_resolution_clock::now(); // end time
-	auto duration3 = duration_cast<microseconds>(end3 - start3); // calculate duration in microseconds
-		
-	//cout << "Insertion Sort: " 
-	//	<< duration3.count() 
-	//	<< " microseconds" << endl; // display execution time
+	// ---- Linear Search by Student ID
+	int linearIDCount = arr->count; // snapshot count
+	auto duration3 = duration_cast<microseconds>(microseconds(0));
 
-	// ---- Binary Search by Student ID----
-	insertionSortByID(*arr); // sort by student ID first
+	if (linearIDCount > 0) {
+		// search for 3 different student IDs: first, middle and last student
+		const char* linearIDTargets[3] = {
+			arr->students[0].studentID,
+			arr->students[linearIDCount / 2].studentID,
+			arr->students[linearIDCount - 1].studentID
+		};
 
-	int idCount = arr->count; // snapshot count after sort
+		auto start3 = high_resolution_clock::now(); // start time
+
+		// run each target 1000 times to get a measurable average time
+		for (int i = 0; i < 3; i++) {
+			for (int repeat = 0; repeat < 1000; repeat++) {
+				linearSearchByID(*arr, linearIDTargets[i]);
+			}
+		}
+
+		auto end3 = high_resolution_clock::now(); // end time
+		duration3 = duration_cast<microseconds>(end3 - start3);
+
+	} 
+
+	// ---- Linear Search by Name
+	int linearNameCount = arr->count; // snapshot count
 	auto duration4 = duration_cast<microseconds>(microseconds(0));
 
-	if (idCount > 0) {
-		// search for 3 different student ids: first, middle and last student
-		const char* idTargets[3] = {
-			arr->students[0].studentID,
-			arr->students[idCount / 2].studentID,
-			arr->students[idCount - 1].studentID
+	if (linearNameCount > 0) {
+		// search for 3 different names: first, middle and last student
+		const char* linearNameTargets[3] = {
+			arr->students[0].fullName,
+			arr->students[linearNameCount / 2].fullName,
+			arr->students[linearNameCount - 1].fullName
 		};
 
 		auto start4 = high_resolution_clock::now(); // start time
@@ -855,18 +940,47 @@ void runPerformanceTest() {
 		// run each target 1000 times to get a measurable average time
 		for (int i = 0; i < 3; i++) {
 			for (int repeat = 0; repeat < 1000; repeat++) {
-				binarySearchByID(*arr, idTargets[i]);
+				linearSearchByName(*arr, linearNameTargets[i]);
 			}
 		}
+
 		auto end4 = high_resolution_clock::now(); // end time
-		duration4 = duration_cast<microseconds>(end4 - start4); // calculate duration in microseconds
+		duration4 = duration_cast<microseconds>(end4 - start4);
+
 	}
 
-	// divide by 3000 to get average time per search (
-	// Note: 3 targets x 1000 runs each
-	//cout << "Binary Search  : " 
-	//	<< duration4.count() / 3000.0
-	//	<< " microseconds (average of 3 targets x 1000 runs)" << endl;
+	// ---- Insertion Sort ----
+	auto start5 = high_resolution_clock::now(); // start time
+	insertionSort(*arr); // perform insertion sort operation
+	auto end5 = high_resolution_clock::now(); // end time
+	auto duration5 = duration_cast<microseconds>(end5 - start5); // calculate duration in microseconds
+		
+
+	// ---- Binary Search by Student ID----
+	insertionSortByID(*arr); // sort by student ID first
+
+	int binaryIdCount = arr->count; // snapshot count after sort
+	auto duration6 = duration_cast<microseconds>(microseconds(0));
+
+	if (binaryIdCount > 0) {
+		// search for 3 different student ids: first, middle and last student
+		const char* binaryIdTargets[3] = {
+			arr->students[0].studentID,
+			arr->students[binaryIdCount / 2].studentID,
+			arr->students[binaryIdCount - 1].studentID
+		};
+
+		auto start6 = high_resolution_clock::now(); // start time
+
+		// run each target 1000 times to get a measurable average time
+		for (int i = 0; i < 3; i++) {
+			for (int repeat = 0; repeat < 1000; repeat++) {
+				binarySearchByID(*arr, binaryIdTargets[i]);
+			}
+		}
+		auto end6 = high_resolution_clock::now(); // end time
+		duration6 = duration_cast<microseconds>(end6 - start6); // calculate duration in microseconds
+	}
 
 	// ---- Binary Search by Name ----
 	insertionSortByName(*arr); // sort by name first
@@ -879,7 +993,7 @@ void runPerformanceTest() {
 
 	};
 
-	auto start5 = high_resolution_clock::now(); // start time
+	auto start7 = high_resolution_clock::now(); // start time
 
 	// run each target 1000 times to get a measurable average time
 	for (int i = 0; i < 3; i++) {
@@ -889,14 +1003,8 @@ void runPerformanceTest() {
 		}
 	}
 
-	auto end5 = high_resolution_clock::now(); // end time
-	auto duration5 = duration_cast<microseconds>(end5 - start5); // calculate duration in microseconds
-
-	// divide by 3000 to get average time per search (
-	// Note: 3 targets x 1000 runs each
-	//cout << "Binary Search  : " 
-	//	<< duration5.count() / 3000.0
-	//	<< " microseconds (average of 3 targets x 1000 runs)" << endl;
+	auto end7 = high_resolution_clock::now(); // end time
+	auto duration7 = duration_cast<microseconds>(end7 - start7); // calculate duration in microseconds
 
 	// ---- Delete by Value ----
 	// delete the 10 students interted above and calculate the time
@@ -913,30 +1021,27 @@ void runPerformanceTest() {
 		"TP075883"
 	};
 
-	auto start6 = high_resolution_clock::now(); // start time
+	auto start8 = high_resolution_clock::now(); // start time
 	for (int i = 0; i < 10; i++) {
 		deleteByValue(*arr, deleteStudent[i]); // perform delete operation
 
 	}
 
-	auto end6 = high_resolution_clock::now(); // end time
-	auto duration6 = duration_cast<microseconds>(end6 - start6); // calculate duration in microseconds
-
-	// divide by 10 to get average time per delete
-	//cout << "Delete by Value: "
-	//	<< duration6.count() / 10.0
-	//	<< " microseconds (average of 10 deletes)" << endl;
+	auto end8 = high_resolution_clock::now(); // end time
+	auto duration8 = duration_cast<microseconds>(end8 - start8); // calculate duration in microseconds
 
 	// display summary of performance test
 	cout << endl << "-------------------------------------------------------------------------------------------------------------------" << endl;
 	cout << "   SUMMARY OF PERFORMANCE TEST (IN MICROSECONDS)  " << endl;
 	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
-	cout << "Display All Records        : " << duration1.count() << " microseconds" << endl;
-	cout << "Append to End              : " << duration2.count() / 10.0 << " microseconds (average of 10 inserts)" << endl;
-	cout << "Insertion Sort             : " << duration3.count() << " microseconds" << endl; 
-	cout << "Binary Search by Student ID: " << duration4.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
-	cout << "Binary Search by Name      : " << duration5.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
-	cout << "Delete by Value            : " << duration6.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
+	cout << "Display All Records          : " << duration1.count() << " microseconds" << endl;
+	cout << "Append New Student to End    : " << duration2.count() / 10.0 << " microseconds (average of 10 inserts)" << endl;
+	cout << "Linear Search by ID          : " << duration3.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Linear Search by Name        : " << duration4.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Insertion Sort by CGPA       : " << duration5.count() << " microseconds" << endl; 
+	cout << "Binary Search by Student ID  : " << duration6.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Binary Search by Name        : " << duration7.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Delete student by Student ID : " << duration8.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
 	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
 
 	delete arr; // free memory allocated for the array
@@ -961,13 +1066,14 @@ void menu() {
 	cout << "1. Load a dataset from .csv file" << endl;
 	cout << "2. Display all records" << endl;
 	cout << "3. Add a new student" << endl;
-	cout << "4. Sort students by CGPA" << endl;
-	cout << "5. Binary search by Student ID or Name" << endl;
-	cout << "6. Delete a student by student ID" << endl;
-	cout << "7. Run performance test" << endl;
-	cout << "8. Exit program" << endl;
+	cout << "4. Linear search by Student ID or Name" << endl;
+	cout << "5. Sort students by CGPA" << endl;
+	cout << "6. Binary search by Student ID or Name" << endl;
+	cout << "7. Delete a student by Student ID" << endl;
+	cout << "8. Run performance test" << endl;
+	cout << "9. Exit program" << endl;
 	cout << "===================================================================================================================" << endl;
-	cout << "Please select an option (1-8): ";
+	cout << "Please select an option (1-9): ";
 }
 
 // ===================================================================================================================
@@ -998,13 +1104,14 @@ int main() {
 			cout << "  2. students_2000.csv" << endl;
 			cout << "  3. students_8000.csv" << endl;
 			cout << "  4. students_30000.csv" << endl;
+			cout << "  5. Back to main menu" << endl;
 
 			int choice;
 			string filename;
 
 			// map the choice to the corresponding dataset
 			while (true) {
-				cout << "Enter your choice (1-4): ";
+				cout << "Enter your choice (1-5): ";
 				cin >> choice;
 				cin.ignore(); // ignore newline character after integer input
 
@@ -1027,11 +1134,18 @@ int main() {
 					filename = "students_30000.csv";
 					break;
 
+				} 
+				else if (choice == 5) {
+					break;
 				}
 				else {
-					cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+					cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
 
 				}
+			}
+
+			if (choice == 5) {
+				break; // back to main menu
 			}
 
 			// load the dataset based on the choice
@@ -1077,8 +1191,104 @@ int main() {
 
 		}
 
-		// ---- Sort students by CGPA ----
+		// ---- Linear search by Student ID or Name ----
 		case 4:
+		{
+			// check if there are any student records to search
+			if (arr->count == 0) {
+				cout << "Error: No student records to search." << endl;
+				break;
+			}
+
+			// prompt user to choose search type
+			cout << "Linear Search Options: " << endl;
+			cout << "1. Search by Student ID" << endl;
+			cout << "2. Search by Name" << endl;
+			cout << "3. Back to main menu" << endl;
+
+			int searchChoice;
+			while (true) {
+				cout << "Enter your choice (1-3): ";
+				cin >> searchChoice;
+				cin.ignore();
+
+				if (searchChoice >= 1 && searchChoice <= 3) {
+					break;
+
+				}
+
+				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
+			}
+
+			if (searchChoice == 3) {
+				break; // back to main menu
+
+			}
+
+			if (searchChoice == 1) {
+				// ---- Linear Search by Student ID ----
+				char targetID[20];
+				cout << "Enter Student ID to search: ";
+				cin.getline(targetID, sizeof(targetID));
+
+				int index = linearSearchByID(*arr, targetID);
+
+				if (index != -1) {
+					cout << "First match at index " << index << ":" << endl;
+					// display all students with the same Student ID
+					for (int i = index; i < arr->count; i++) {
+						if (strcmp(arr->students[i].studentID, targetID) == 0) {
+							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							displayStudentInfo(arr->students[i]);
+
+						}
+						else {
+							break; // stop when ID no longer matches
+
+						}
+					}
+				}
+				else {
+					cout << ">>> Error: No student found with Student ID " << targetID << endl;
+					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+				}
+			}
+			else {
+				// ---- Linear Search by Name ----
+				char targetName[50];
+				cout << "Enter full name: ";
+				cin.getline(targetName, sizeof(targetName));
+
+				int index = linearSearchByName(*arr, targetName);
+
+				if (index != -1) {
+					cout << "Match found at index " << index << ":" << endl;
+					// display all students with the same name
+					for (int i = index; i < arr->count; i++) {
+						if (strcmp(arr->students[i].fullName, targetName) == 0) {
+							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							displayStudentInfo(arr->students[i]);
+
+						}
+						else {
+							break; // stop when name no longer matches
+
+						}
+					}
+				}
+				else {
+					cout << ">>> Error: No student found with name " << targetName << endl;
+					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+
+				}
+			}
+
+			break;
+
+		}
+
+		// ---- Sort students by CGPA ----
+		case 5:
 		{
 			// check if there are any student records to sort
 			if (arr->count == 0) {
@@ -1091,28 +1301,44 @@ int main() {
 			cout << "Sort Options:" << endl;
 			cout << "  1. Ascending " << endl;
 			cout << "  2. Descending " << endl;
+			cout << "  3. Back to main menu" << endl;
 
 			int sortChoice;
 			while (true) {
-				cout << "Enter your choice (1-2): ";
+				cout << "Enter your choice (1-3): ";
 				cin >> sortChoice;
 				cin.ignore();
 
-				if (sortChoice == 1 || sortChoice == 2) {
+				if (sortChoice >= 1 && sortChoice <= 3) {
 					break;
 
 				}
 
-				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
+				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
 			}
 
 			if (sortChoice == 1) {
 				insertionSortAscending(*arr);
 
 			}
-			else {
+			else if (sortChoice == 2 ) {
 				insertionSortDescending(*arr);
 
+			}
+			else if (sortChoice == 3) {
+				break;
+			}
+			else {
+				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
+			}
+
+			cout << "Do you want to display all records? (1 = Yes, 2 = No): ";
+			int displayChoice;
+			cin >> displayChoice;
+			cin.ignore();
+
+			if (displayChoice == 1) {
+				displayAllRecords(*arr);
 			}
 
 			break;
@@ -1120,10 +1346,8 @@ int main() {
 		}
 
 		// ---- Binary search by Student ID or Name ----
-		case 5:
+		case 6:
 		{
-			double target;
-
 			// check if there are any student records to search
 			if (arr->count == 0) {
 				cout << "Error: No student records to search." << endl;
@@ -1135,20 +1359,21 @@ int main() {
 			cout << "Binary Search Options: " << endl;
 			cout << "1. Search by Student ID" << endl;
 			cout << "2. Search by Name" << endl;
+			cout << "3. Back to main menu" << endl;
 
 			int searchChoice;
 			while (true) {
-				cout << "Enter your choice (1-2): ";
+				cout << "Enter your choice (1-3): ";
 				cin >> searchChoice;
 				cin.ignore();
 
-				if (searchChoice == 1 || searchChoice == 2) {
+				if (searchChoice >= 1 && searchChoice <= 3) {
 					break;
 
 				}
 
-				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
-			}
+				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
+			} 
 
 			if (searchChoice == 1) {
 				// ---- Binary Search by Student ID ----
@@ -1185,7 +1410,7 @@ int main() {
 				}
 
 			}
-			else {
+			else if (searchChoice ==2) {
 				// ---- Binary Search by Name ----
 				char targetName[50];
 				cout << ">>> Note: The array will be sorted by Name before performing binary search." << endl;
@@ -1213,6 +1438,10 @@ int main() {
 					}
 
 				}
+				else if (searchChoice == 3) {
+					break; // back to main menu
+
+				}
 				else {
 					cout << ">>> Error: No student found with name " << targetName << endl;
 					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
@@ -1228,7 +1457,7 @@ int main() {
 		}
 
 		// ---- Delete a student by student ID ----
-		case 6:
+		case 7:
 		{
 			char target[20];
 			cout << "Enter student ID to delete: ";
@@ -1239,7 +1468,7 @@ int main() {
 		}
 
 		// ---- Run performance test ----
-		case 7:
+		case 8:
 		{
 			runPerformanceTest();
 			break;
@@ -1247,7 +1476,7 @@ int main() {
 		}
 
 		// ---- Exit program ----
-		case 8:
+		case 9:
 		{
 			cout << "Thank you for using the Student Record Management System!" << endl;
 			cout << "Exiting program..." << endl;
@@ -1258,7 +1487,7 @@ int main() {
 		// ---- Invalid option ----
 		default:
 		{
-			cout << "Error: Invalid option. Please select a number between 1 and 8." << endl;
+			cout << "Error: Invalid option. Please select a number between 1 and 9." << endl;
 			break;
 
 		}
