@@ -23,6 +23,8 @@
 | 6 | Insertion Sort by CGPA Descending |
 | 7 | Binary Search by Student ID |
 | 8 | Binary Search by Name |
+| 9 | Linear Search by Student ID |
+| 10 | Linear Search by Name |
 
 ---
 
@@ -46,18 +48,19 @@
 ## How to Run
 
 1. Run the program
-2. The system will display a menu with 8 options:
+2. The system will display a menu with 9 options:
 
 | Option | Description |
 |---|---|
 | 1 | Load a dataset from `.csv` file |
 | 2 | Display all records |
 | 3 | Add a new student |
-| 4 | Sort students by CGPA (Ascending or Descending) |
-| 5 | Binary search by Student ID or Name |
-| 6 | Delete a student by Student ID |
-| 7 | Run performance test |
-| 8 | Exit program |
+| 4 | Linear search by Student ID or Name |
+| 5 | Sort students by CGPA (Ascending or Descending) |
+| 6 | Binary search by Student ID or Name |
+| 7 | Delete a student by Student ID |
+| 8 | Run performance test |
+| 9 | Exit program |
 
 3. Always perform **Option 1** before using any other feature
 
@@ -66,7 +69,7 @@
 ## Menu Options
 
 ### Option 1 — Load a dataset from `.csv` file
-Select one of the four datasets to load into the system.
+Select one of the four datasets to load into the system. Select **Option 5** to go back to the main menu without loading.
 
 ### Option 2 — Display all records
 Print all student records currently loaded in the system.
@@ -80,23 +83,37 @@ Manually enter a new student record with the following fields:
 - CGPA
 - Contact Number
 
-### Option 4 — Sort students by CGPA
+### Option 4 — Linear search by Student ID or Name
+Search for a student record using Linear Search. You will be prompted to choose:
+- `1` Search by Student ID
+- `2` Search by Name
+- `3` Back to main menu
+
+No sorting is required. Linear search works on an unsorted array.
+
+### Option 5 — Sort students by CGPA
 Sort all records by CGPA using Insertion Sort. You will be prompted to choose:
 - `1` Ascending — lowest CGPA first
 - `2` Descending — highest CGPA first
+- `3` Back to main menu
 
-### Option 5 — Binary search by Student ID or Name
+After sorting, you will be asked whether to display all records.
+
+### Option 6 — Binary search by Student ID or Name
 Search for a student record using Binary Search. You will be prompted to choose:
 - `1` Search by Student ID — array will be sorted by Student ID automatically before searching
 - `2` Search by Name — array will be sorted by Name automatically before searching
+- `3` Back to main menu
 
-### Option 6 — Delete a student by Student ID
+> ⚠️ Binary search will re-sort the array before searching, which changes the current order of records.
+
+### Option 7 — Delete a student by Student ID
 Remove a student record from the system using their Student ID.
 
-### Option 7 — Run performance test
-Measures the execution time of all operations on a selected dataset. Loads its own separate copy of the dataset and will **not** affect the records currently loaded in the system.
+### Option 8 — Run performance test
+Measures the execution time of all operations on a selected dataset. Loads its own separate copy of the dataset and will **not** affect the records currently loaded in the system. Select **Option 5** to go back to the main menu without running the test.
 
-### Option 8 — Exit program
+### Option 9 — Exit program
 Terminate the system.
 
 ---
@@ -105,11 +122,10 @@ Terminate the system.
 
 > ⚠️ Always load a dataset **(Option 1)** before using any other options.
 
-- **Sort (Option 4)** will prompt whether to sort Ascending or Descending before sorting
-- **Binary Search (Option 5)** will prompt whether to search by Student ID or Full Name
-  - Searching by Student ID will automatically sort the array by Student ID first
-  - Searching by Name will automatically sort the array by Name first
-- **Performance Test (Option 7)** loads its own separate copy of the dataset and will not affect the records currently loaded in the system
+- **Linear Search (Option 4)** does not require sorting — it works on the array in its current order
+- **Sort (Option 5)** will prompt whether to sort Ascending or Descending, and whether to display all records after sorting
+- **Binary Search (Option 6)** will automatically re-sort the array before searching, which will change the current record order
+- **Performance Test (Option 8)** loads its own separate copy of the dataset and will not affect records currently loaded
 - CGPA must be between **0.0 and 4.0**
 - Duplicate Student IDs are **not allowed**
 
