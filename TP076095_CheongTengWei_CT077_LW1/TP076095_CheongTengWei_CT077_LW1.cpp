@@ -32,6 +32,7 @@
 #include <string> // for string class
 #include <sstream> // for string stream operations
 #include <chrono> // for measuring execution time
+#include <iomanip> // for table formatting
 
 using namespace std;
 using namespace chrono;
@@ -63,14 +64,14 @@ void displayStudentInfo(const Student& student) {
 
 	// check if student ID is empty
 	if (strlen(student.studentID) == 0) {
-		cout << "Error: Student ID is empty." << endl;
+		cout << "[!] Error: Student ID is empty." << endl;
 		return; // student ID is empty
 
 	}
 
 	// check if full name is empty
 	if (strlen(student.fullName) == 0) {
-		cout << "Error: Full name is empty." << endl;
+		cout << "[!]Error: Full name is empty." << endl;
 		return; // full name is empty
 
 	}
@@ -140,7 +141,7 @@ bool checkCGPA(double cgpa) {
 
 
 // ===================================================================================================================
-// Algorithm 1: Append to End
+// Algorithm 1: Append New Student Record to End
 // 
 // How it works:
 // 1. Check if there is enough space in the array to add a new student. 
@@ -157,21 +158,21 @@ bool checkCGPA(double cgpa) {
 bool appendToEnd(StudentArray& arr, const Student& newStudent) {
 	// check if we have enough space to add a new student
 	if (arr.count >= maxStudents) {
-		cout << "Error: Student array is full. Cannot add new student." << endl;
+		cout << "[!] Error: Student array is full. Cannot add new student." << endl;
 		return false; // failed to append
 
 	}
 
 	// check for duplicate student ID
 	if (checkStudentID(arr, newStudent.studentID)) {
-		cout << "Error: Student ID " << newStudent.studentID << " already exists. " << endl;
+		cout << "[!] Error: Student ID " << newStudent.studentID << " already exists. " << endl;
 		return false; // failed to append
 
 	}
 
 	// check if CGPA is valid
 	if (!checkCGPA(newStudent.cgpa)) {
-		cout << "Error: Invalid CGPA. CGPA must be between 0.0 and 4.0." << endl;
+		cout << "[!] Error: Invalid CGPA. CGPA must be between 0.0 and 4.0." << endl;
 		return false; // failed to append
 
 	}
@@ -181,75 +182,79 @@ bool appendToEnd(StudentArray& arr, const Student& newStudent) {
 	arr.count++; 
 
 	// display success message
-	cout << "Student " << newStudent.fullName << " added successfully." << endl;
+	cout << ">>> Student " << newStudent.fullName << " added successfully." << endl;
 
 	return true; // successfully appended
+
 }
 
-
-
 // ===================================================================================================================
-// Algorithm 2: Delete by Value
-// 
+// Algorithm 2: Linear Search by Student ID
+//
 // How it works:
-// 1. Use linear search to find the index of the target student ID in the array. 
-//	  If not found, display error message.
-// 2. Check if the array is empty. If empty, display error message.
-// 3. Check if the target student ID is found. If not found, display error message.
-// 4. Shift the elements left to fill the gap.
-// 5. Display success message after deletion.
+// 1. Loop through the array from the first element to the last.
+// 2. Compare each student's ID with the target ID.
+//    - If they match , return the index immediately.
+// 3. - If the loop finishes without finding a match, return -1.
+//
+// Prerequisite: None. Array does not need to be sorted.
 //
 // Big-O Notation: O(n) linear time
-// This means that the time taken to delete a student increases as the number of students increases.
-// This is because the function may need to search through the array to find the target student ID before deleting it.
+// This means the time taken grows proportionally with the number of students.
+// In the worst case, the target is at the last position or does not exist,
+// so every record must be checked before a conclusion can be made.
 // ===================================================================================================================
 
-// find the index of the target student ID 
-int linearSearch(Student arr[], int n, const char* target) {
-	for (int i = 0; i < n; i++) {
-		// compare the student id with the target student id
-		if (strcmp(arr[i].studentID, target) == 0) {
+int linearSearchByID(const StudentArray& arr, const char* target) {
+	// loop through every student in the array
+	for (int i = 0; i < arr.count; i++) {
+		// compare current student ID with target ID
+		if (strcmp(arr.students[i].studentID, target) == 0) {
 			return i; // target found
 
 		}
+
 	}
 
 	return -1; // target not found
-}
-
-void deleteByValue(StudentArray& arr, const char* target) {
-	// find the index of the target student using linear search
-	int index = linearSearch(arr.students, arr.count, target);
-
-	// check if the array is empty
-	if (arr.count == 0) {
-		cout << "Error: Student array is empty. Nothing to delete." << endl;
-		return; // array is empty
-
-	}
-
-	// check if the target student id is found
-	if (index == -1) {
-		cout << "Error: Student ID " << target << " not found. " << endl;
-		return; // target not found
-
-	}
-
-	// shift the elements left to fill the gap
-	for (int i = index;i < arr.count - 1; i++) {
-		arr.students[i] = arr.students[i + 1];
-
-	}
-
-	arr.count--;
-
-	// display success message
-	cout << "Student with ID " << target << " has been deleted successfully." << endl;
 
 }
 
 // ===================================================================================================================
-// Algorithm 3: Insertion Sort By Student ID
+// Algorithm 3: Linear Search by Name
+//
+// How it works:
+// 1. Loop through the array from the first element to the last.
+// 2. Compare each student's full name with the target name.
+//    - If they match , return the index immediately.
+// 3. If the loop finishes without finding a match, return -1.
+//
+// Prerequisite: None. Array does not need to be sorted.
+//
+// Big-O Notation: O(n) linear time
+// This means the time taken grows proportionally with the number of students.
+// In the worst case, the target is at the last position or does not exist,
+// so every record must be checked before a conclusion can be made.
+// ===================================================================================================================
+
+int linearSearchByName(const StudentArray& arr, const char* target) {
+	// loop through every student in the array
+	for (int i = 0; i < arr.count; i++) {
+		// compare current student's name with target name
+		if (strcmp(arr.students[i].fullName, target) == 0) {
+			return i; // target found
+
+		}
+
+	}
+
+	return -1; // target not found
+
+}
+
+
+// ===================================================================================================================
+// Algorithm 4: Insertion Sort By Student ID
 // 
 // How it works:
 // 1. Loop through the array from the second element to the end of the array.
@@ -285,12 +290,12 @@ void insertionSortByID(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << "Students sorted by Student ID successfully." << endl;
+	cout << ">>> Students sorted by Student ID successfully." << endl;
 
 }
 
 // ===================================================================================================================
-// Algorithm 4: Insertion Sort By Name
+// Algorithm 5: Insertion Sort By Name
 // 
 // How it works:
 // 1. Loop through the array from the second element to the end of the array.
@@ -326,14 +331,14 @@ void insertionSortByName(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << "Students sorted by name successfully." << endl;
+	cout << ">>>Students sorted by name successfully." << endl;
 
 }
 
 
 
 // ===================================================================================================================
-// Algorithm 5: Insertion Sort By CGPA (Ascending)
+// Algorithm 6: Insertion Sort By CGPA (Ascending)
 // 
 // How it works:
 // 1. Loop through the array from the second element to the end of the array.
@@ -369,15 +374,14 @@ void insertionSortAscending(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << "Students sorted by CGPA (Ascending) successfully." << endl;
-
+	cout << ">>> Students sorted by CGPA (Ascending) successfully." << endl;
 
 }
 
 
 
 // ===================================================================================================================
-// Algorithm 6: Insertion Sort By CGPA (Descending)
+// Algorithm 7: Insertion Sort By CGPA (Descending)
 // 
 // How it works:
 // 1. Loop through the array from the second element to the end of the array.
@@ -413,7 +417,7 @@ void insertionSortDescending(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << "Students sorted by CGPA (Descending) successfully." << endl;
+	cout << ">>>Students sorted by CGPA (Descending) successfully." << endl;
 
 }
 
@@ -429,7 +433,7 @@ void insertionSort(StudentArray& arr) {
 
 
 // ===================================================================================================================
-// Algorithm 7: Binary Search by Student ID
+// Algorithm 8: Binary Search by Student ID
 // 
 // How it works:
 // 1. Define lower and upper positions of the search range.
@@ -458,20 +462,24 @@ int binarySearchByID(const StudentArray& arr, const char* target) {
 		// calculate the middle position
 		int middle = (low + high) / 2; 
 
+		// compare the student ID at the middle position with the target ID
 		int compare = strcmp(arr.students[middle].studentID, target);
 
 		if (compare == 0) {
 			// walk left to find the first occurrence
 			while (middle > 0 && strcmp(arr.students[middle - 1].studentID, target) == 0) {
 				middle--;
+
 			}
 
 			return middle; // target found
 
 		} else if (compare < 0) {
 			low = middle + 1; // search right half
+
 		} else {
 			high = middle - 1; // search left half
+
 		}
 
 	}
@@ -483,7 +491,7 @@ int binarySearchByID(const StudentArray& arr, const char* target) {
 
 
 // ===================================================================================================================
-// Algorithm 8: Binary Search by Name
+// Algorithm 9: Binary Search by Name
 // 
 // How it works:
 // 1. Define lower and upper positions of the search range.
@@ -501,6 +509,7 @@ int binarySearchByID(const StudentArray& arr, const char* target) {
 // This is because binary search keeps dividing the search range in half, which reduces the number of 
 // comparisons needed to find the target student name.
 // ===================================================================================================================
+
 int binarySearchByName(const StudentArray& arr, const char* target) {
 	// set low and high positions of the search 
 	int low = 0;
@@ -511,22 +520,24 @@ int binarySearchByName(const StudentArray& arr, const char* target) {
 		// calculate the middle position
 		int middle = (low + high) / 2;
 
+		// compare the full name at the middle position with the target name
 		int compare = strcmp(arr.students[middle].fullName, target);
 
 		if (compare == 0) {
 			// walk left to find the first occurrence
 			while (middle > 0 && strcmp(arr.students[middle - 1].fullName, target) == 0) {
 				middle--;
+
 			}
 
-			return middle; // target found
+			return middle; // target found, return the index
 
-		}
-		else if (compare < 0) {
+		} else if (compare < 0) {
 			low = middle + 1; // search right half
-		}
-		else {
+
+		} else {
 			high = middle - 1; // search left half
+
 		}
 
 	}
@@ -535,95 +546,100 @@ int binarySearchByName(const StudentArray& arr, const char* target) {
 
 }
 
-
-
 // ===================================================================================================================
-// Algorithm 9: Linear Search by Student ID
-//
+// Algorithm 10: Delete by Student ID
+// 
 // How it works:
-// 1. Loop through the array from the first element to the last.
-// 2. Compare each student's ID with the target ID.
-//    - If they match , return the index immediately.
-// 3. - If the loop finishes without finding a match, return -1.
-//
-// Prerequisite: None. Array does not need to be sorted.
+// 1. Use linear search to find the index of the target student ID in the array. 
+//	  If not found, display error message.
+// 2. Check if the array is empty. If empty, display error message.
+// 3. Check if the target student ID is found. If not found, display error message.
+// 4. Shift the elements left to fill the gap.
+// 5. Display success message after deletion.
 //
 // Big-O Notation: O(n) linear time
-// This means the time taken grows proportionally with the number of students.
-// In the worst case, the target is at the last position or does not exist,
-// so every record must be checked before a conclusion can be made.
+// This means that the time taken to delete a student increases as the number of students increases.
+// This is because the function may need to search through the array to find the target student ID before deleting it.
 // ===================================================================================================================
-int linearSearchByID(const StudentArray& arr, const char* target) {
-	// loop through every student in the array
-	for (int i = 0; i < arr.count; i++) {
-		// compare current student ID with target ID
-		if (strcmp(arr.students[i].studentID, target) == 0) {
-			return i; // target found
 
-		}
+void deleteByID(StudentArray& arr, const char* target) {
+	// find the index of the target student using linear search
+	int index = linearSearchByID(arr, target);
+
+	// check if the array is empty
+	if (arr.count == 0) {
+		cout << "[!] Error: Student array is empty. Nothing to delete." << endl;
+		return; // array is empty
 
 	}
 
-	return -1; // target not found
-
-}
-
-// ===================================================================================================================
-// Algorithm 10: Linear Search by Name
-//
-// How it works:
-// 1. Loop through the array from the first element to the last.
-// 2. Compare each student's full name with the target name.
-//    - If they match , return the index immediately.
-// 3. If the loop finishes without finding a match, return -1.
-//
-// Prerequisite: None. Array does not need to be sorted.
-//
-// Big-O Notation: O(n) linear time
-// This means the time taken grows proportionally with the number of students.
-// In the worst case, the target is at the last position or does not exist,
-// so every record must be checked before a conclusion can be made.
-// ===================================================================================================================
-
-int linearSearchByName(const StudentArray& arr, const char* target) {
-	// loop through every student in the array
-	for (int i = 0; i < arr.count; i++) {
-		if (strcmp(arr.students[i].fullName, target) == 0) {
-			return i; // target found
-
-		}
+	// check if the target student id is found
+	if (index == -1) {
+		cout << "[!] Error: Student ID " << target << " not found. " << endl;
+		return; // target not found
 
 	}
 
-	return -1; // target not found
+	// shift the elements left to fill the gap
+	for (int i = index;i < arr.count - 1; i++) {
+		arr.students[i] = arr.students[i + 1];
+
+	}
+
+	arr.count--;
+
+	// display success message
+	cout << ">>> Student with ID " << target << " has been deleted successfully." << endl;
 
 }
-
-
 
 // ===================================================================================================================
 // displayAllRecords() function:
-// This function displays the details of all students in the array.
+// This function displays the details of all students in a table format.
 // ===================================================================================================================
 
 void displayAllRecords(const StudentArray& arr) {
 	// check if there are any student records to display
 	if (arr.count == 0) {
-		cout << "No student records to display." << endl;
+		cout << endl << ">>> No student records to display. Please select a dataset file to load. " << endl;
 		return; // no records to display
 
 	}
 
-	cout << "Total records: " << arr.count << endl;
-	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << ">>> Total records: " << arr.count << endl;
+	cout << endl << "------------------------------------------------------------------------------------" << endl;
 
-	// loop through the array to display each student's details
+	// print table header
+	cout << left
+		<< setw(8) << "No. "
+		<< setw(12) << "Student ID"
+		<< setw(25) << "Full Name"
+		<< setw(12) << "Programme"
+		<< setw(8) << "Year"
+		<< setw(8) << "CGPA"
+		<< setw(15) << "Contact"
+		<< endl;
+
+	cout << "------------------------------------------------------------------------------------" << endl;
+
+	// loop through the array to display each student's details in a row
 	for (int i = 0; i < arr.count; i++) {
-		cout << "Record #" << (i + 1) << endl;
-		displayStudentInfo(arr.students[i]);
-		cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+		const Student& s = arr.students[i];
+
+		cout << left
+			<< setw(8) << i + 1
+			<< setw(12) << s.studentID
+			<< setw(25) << s.fullName
+			<< setw(12) << s.programme
+			<< setw(8) << s.yearOfStudy
+			<< setw(8) << fixed << setprecision(2) << s.cgpa
+			<< setw(15) << s.contactNumber
+			<< endl;
 
 	}
+
+	cout << "------------------------------------------------------------------------------------" << endl;
+
 }
 
 
@@ -644,7 +660,7 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 
 	// check if the file is opened
 	if (!file.is_open()) {
-		cout << "Error: Could not open file " << filename << endl;
+		cout << "[!] Error: Could not open file " << filename << endl;
 		return 0; // failed to load data
 
 	}
@@ -684,7 +700,7 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 
 		// check if there is missing required fields
 		if (studentID.empty() || fullName.empty() || programme.empty() || cgpa.empty()) {
-			cout << "Warning: Skipping line with missing fields: " << line << endl;
+			cout << "[!]Warning: Skipping line with missing fields: " << line << endl;
 			skippedCount++;
 			continue; // skip line 
 
@@ -706,7 +722,7 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 		} else {
 			skippedCount++; // increase skipped count if student is not added
 			// display warning message if there is error
-			cout << "Warning: Skipping line due to validation error: " << line << endl;
+			cout << "[!] Warning: Skipping line due to validation error: " << line << endl;
 
 		}
 
@@ -715,8 +731,8 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 		file.close();
 
 		// display summary
-		cout << "Loaded " << loadedCount << " students from " << filename << endl;
-		cout << "Skipped " << skippedCount << " rows." << endl;
+		cout << endl << ">>> Loaded " << loadedCount << " students from " << filename << endl;
+		cout << ">>> Skipped " << skippedCount << " rows." << endl;
 
 		return loadedCount; // return the number of students loaded
 
@@ -729,59 +745,74 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 // runEdgeCaseTest() function:
 // This function make sure the program handles errors and boundaries correctly.
 // ===================================================================================================================
+
 void runEdgeCaseTest() {
 	// display edge case test header
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 	cout << "   Running Edge Case Test......   " << endl;
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 
 	StudentArray* arr = new StudentArray();
 
 	cout << endl << "---- Edge Case 1: Search on empty array ----" << endl;
 	int result = binarySearchByID(*arr, "TP000001");
-	if (result == -1)
+	if (result == -1) {
 		cout << ">>> Test Passed. Binary search on empty array returned -1 as expected." << endl;
+	}
 
 	cout << endl << "---- Edge Case 2: Insert CGPA = 4.00 (maximum boundary) ----" << endl;
-	Student student1 = { "TP000001", "Testing Student 1", "CT103", 1, 4.00, "010-3914368" };
+	Student student1 = {"TP000001", "Testing Student 1", "CT103", 1, 4.00, "010-3914368" };
 	appendToEnd(*arr, student1);
 
 	cout << endl << "---- Edge Case 3: Insert CGPA = 0.00 (minimum boundary) ----" << endl;
-	Student student2 = { "TP000002", "Testing Student 2", "CT103", 1, 0.00, "011-69832913" };
+	Student student2 = {"TP000002", "Testing Student 2", "CT103", 1, 0.00, "011-69832913" };
 	appendToEnd(*arr, student2);
 
-
-	cout << endl << "---- Edge Case 4: Binary search ID for non-existent Student ID ----" << endl;
-	insertionSort(*arr);
-	int idNotFound = binarySearchByID(*arr, "TP999999");
-	if (idNotFound == -1) {
+	cout << endl << "---- Edge Case 4: Linear search ID for non-existent Student ID ----" << endl;
+	int idLinearNotFound = linearSearchByID(*arr, "TP999999");
+	if (idLinearNotFound == -1) {
 		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
 
 	}
 
-	cout << endl << "---- Edge Case 5: Binary search by Name for non-existent student name ----" << endl;
-	insertionSort(*arr);
-	int nameNotFound = binarySearchByName(*arr, "Non-existent Student");
-	if (nameNotFound == -1) {
+	cout << endl << "---- Edge Case 5: Linear search by Name for non-existent student name ----" << endl;
+	int nameLinearNotFound = linearSearchByName(*arr, "Non-existent Student");
+	if (nameLinearNotFound == -1) {
 		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
 
 	}
 
-	cout << endl << "---- Edge Case 6: Delete a record twice ----" << endl;
-	deleteByValue(*arr, "TP000002");  // first delete should succeed
-	deleteByValue(*arr, "TP000002");  // second delete should show error
+	cout << endl << "---- Edge Case 6: Binary search ID for non-existent Student ID ----" << endl;
+	insertionSort(*arr);
+	int idBinaryNotFound = binarySearchByID(*arr, "TP999999");
+	if (idBinaryNotFound == -1) {
+		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
 
-	cout << endl << "---- Edge Case 7: Insert 1 record, delete it, then display ----" << endl;
-	Student student3 = { "TP000003", "Testing Student 3", "CT101", 1, 2.50, "011-3936706" };
+	}
+
+	cout << endl << "---- Edge Case 7: Binary search by Name for non-existent student name ----" << endl;
+	insertionSort(*arr);
+	int nameBinaryNotFound = binarySearchByName(*arr, "Non-existent Student");
+	if (nameBinaryNotFound == -1) {
+		cout << ">>> Test Passed. Search for non-existent student returned -1 as expected." << endl;
+
+	}
+
+	cout << endl << "---- Edge Case 8: Delete a record twice ----" << endl;
+	deleteByID(*arr, "TP000002");  // first delete should succeed
+	deleteByID(*arr, "TP000002");  // second delete should show error
+
+	cout << endl << "---- Edge Case 9: Insert 1 record, delete it, then display ----" << endl;
+	Student student3 = {"TP000003", "Testing Student 3", "CT101", 1, 2.50, "011-3936706" };
 	appendToEnd(*arr, student3);
-	deleteByValue(*arr, "TP000003");
+	deleteByID(*arr, "TP000003");
 	cout << endl;
 	displayAllRecords(*arr);
 
 	delete arr;
 
 	cout << endl << ">>> Edge Case Testing Completed " << endl;
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 		
 }
 
@@ -807,13 +838,13 @@ void runPerformanceTest() {
 		"students_30000.csv"
 	};
 
-	// display performance test header
-	cout << "===================================================================================================================" << endl;
-	cout << "   Performance Test for Student Record Management System   " << endl;
-	cout << "===================================================================================================================" << endl;
-
 	// run edge case test to check for any validation error
 	runEdgeCaseTest();
+
+	// display performance test header
+	cout << endl << "====================================================================================" << endl;
+	cout << "   Performance Test for Student Record Management System   " << endl;
+	cout << "====================================================================================" << endl;
 
 	// display dataset to users
 	cout << endl << "Select a dataset to test: " << endl;
@@ -834,7 +865,7 @@ void runPerformanceTest() {
 			break;
 		}
 
-		cout << "Error: Invalid choice. Please enter a number between 1 and 5." << endl;
+		cout << "[!]Error: Invalid choice. Please enter a number between 1 and 5." << endl;
 
 	}
 
@@ -857,7 +888,7 @@ void runPerformanceTest() {
 
 	// check if data is loaded successfully
 	if (arr->count == 0) {
-		cout << "Error: No data loaded from " << files[index] << ". Skipping performane test for this dataset." << endl;
+		cout << "[!] Error: No data loaded from " << files[index] << ". Skipping performane test for this dataset." << endl;
 		delete arr; // free memory allocated for the array
 		return; 
 
@@ -923,7 +954,7 @@ void runPerformanceTest() {
 
 	} 
 
-	// ---- Linear Search by Name
+	// ---- Linear Search by Name ----
 	int linearNameCount = arr->count; // snapshot count
 	auto duration4 = duration_cast<microseconds>(microseconds(0));
 
@@ -956,7 +987,7 @@ void runPerformanceTest() {
 	auto duration5 = duration_cast<microseconds>(end5 - start5); // calculate duration in microseconds
 		
 
-	// ---- Binary Search by Student ID----
+	// ---- Binary Search by Student ID ----
 	insertionSortByID(*arr); // sort by student ID first
 
 	int binaryIdCount = arr->count; // snapshot count after sort
@@ -978,6 +1009,7 @@ void runPerformanceTest() {
 				binarySearchByID(*arr, binaryIdTargets[i]);
 			}
 		}
+
 		auto end6 = high_resolution_clock::now(); // end time
 		duration6 = duration_cast<microseconds>(end6 - start6); // calculate duration in microseconds
 	}
@@ -985,26 +1017,32 @@ void runPerformanceTest() {
 	// ---- Binary Search by Name ----
 	insertionSortByName(*arr); // sort by name first
 
-	// search for 3 different names: first, middle and last student
-	const char* nameTargets[3] = {
-		arr->students[0].fullName,
-		arr->students[arr->count / 2].fullName,
-		arr->students[arr->count - 1].fullName
+	int binaryNameCount = arr->count; // snapshot count after sort
+	auto duration7 = duration_cast<microseconds>(microseconds(0));
 
-	};
+	if (binaryNameCount > 0) {
+		// search for 3 different names: first, middle and last student
+		const char* binaryNameTargets[3] = {
+			arr->students[0].fullName,
+			arr->students[binaryNameCount / 2].fullName,
+			arr->students[binaryNameCount - 1].fullName
 
-	auto start7 = high_resolution_clock::now(); // start time
+		};
 
-	// run each target 1000 times to get a measurable average time
-	for (int i = 0; i < 3; i++) {
-		for (int repeat = 0; repeat < 1000; repeat++) {
-			binarySearchByName(*arr, nameTargets[i]);
+		auto start7 = high_resolution_clock::now(); // start time
 
+		// run each target 1000 times to get a measurable average time
+		for (int i = 0; i < 3; i++) {
+			for (int repeat = 0; repeat < 1000; repeat++) {
+				binarySearchByName(*arr, binaryNameTargets[i]);
+
+			}
 		}
-	}
 
-	auto end7 = high_resolution_clock::now(); // end time
-	auto duration7 = duration_cast<microseconds>(end7 - start7); // calculate duration in microseconds
+		auto end7 = high_resolution_clock::now(); // end time
+		duration7 = duration_cast<microseconds>(end7 - start7); // calculate duration in microseconds
+
+	}
 
 	// ---- Delete by Value ----
 	// delete the 10 students interted above and calculate the time
@@ -1023,7 +1061,7 @@ void runPerformanceTest() {
 
 	auto start8 = high_resolution_clock::now(); // start time
 	for (int i = 0; i < 10; i++) {
-		deleteByValue(*arr, deleteStudent[i]); // perform delete operation
+		deleteByID(*arr, deleteStudent[i]); // perform delete operation
 
 	}
 
@@ -1031,24 +1069,24 @@ void runPerformanceTest() {
 	auto duration8 = duration_cast<microseconds>(end8 - start8); // calculate duration in microseconds
 
 	// display summary of performance test
-	cout << endl << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << endl << "------------------------------------------------------------------------------------" << endl;
 	cout << "   SUMMARY OF PERFORMANCE TEST (IN MICROSECONDS)  " << endl;
-	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "------------------------------------------------------------------------------------" << endl;
 	cout << "Display All Records          : " << duration1.count() << " microseconds" << endl;
 	cout << "Append New Student to End    : " << duration2.count() / 10.0 << " microseconds (average of 10 inserts)" << endl;
-	cout << "Linear Search by ID          : " << duration3.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
+	cout << "Linear Search by Student ID  : " << duration3.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
 	cout << "Linear Search by Name        : " << duration4.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
 	cout << "Insertion Sort by CGPA       : " << duration5.count() << " microseconds" << endl; 
 	cout << "Binary Search by Student ID  : " << duration6.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
 	cout << "Binary Search by Name        : " << duration7.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
 	cout << "Delete student by Student ID : " << duration8.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
-	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "------------------------------------------------------------------------------------" << endl;
 
 	delete arr; // free memory allocated for the array
 
 	// display completion message 
 	cout << endl << ">>> Performance test completed for the selected datasets." << endl;
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 
 }
 
@@ -1060,9 +1098,9 @@ void runPerformanceTest() {
 // ===================================================================================================================
 
 void menu() {
-	cout << endl << "===================================================================================================================" << endl;
+	cout << endl << "====================================================================================" << endl;
 	cout << "   Welcome to the Student Record Management System!   " << endl;
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 	cout << "1. Load a dataset from .csv file" << endl;
 	cout << "2. Display all records" << endl;
 	cout << "3. Add a new student" << endl;
@@ -1072,7 +1110,7 @@ void menu() {
 	cout << "7. Delete a student by Student ID" << endl;
 	cout << "8. Run performance test" << endl;
 	cout << "9. Exit program" << endl;
-	cout << "===================================================================================================================" << endl;
+	cout << "====================================================================================" << endl;
 	cout << "Please select an option (1-9): ";
 }
 
@@ -1139,7 +1177,7 @@ int main() {
 					break;
 				}
 				else {
-					cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
+					cout << "[!] Invalid choice. Please enter a number between 1 and 5." << endl;
 
 				}
 			}
@@ -1196,7 +1234,7 @@ int main() {
 		{
 			// check if there are any student records to search
 			if (arr->count == 0) {
-				cout << "Error: No student records to search." << endl;
+				cout << "[!]Error: No student records to search." << endl;
 				break;
 			}
 
@@ -1217,7 +1255,7 @@ int main() {
 
 				}
 
-				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
+				cout << "[!] Error: Invalid choice. Please enter 1, 2 or 3." << endl;
 			}
 
 			if (searchChoice == 3) {
@@ -1234,11 +1272,11 @@ int main() {
 				int index = linearSearchByID(*arr, targetID);
 
 				if (index != -1) {
-					cout << "First match at index " << index << ":" << endl;
+					cout << endl << ">>> First match at index " << index << ":" << endl;
 					// display all students with the same Student ID
 					for (int i = index; i < arr->count; i++) {
 						if (strcmp(arr->students[i].studentID, targetID) == 0) {
-							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							cout << "------------------------------------------------------------------------------------" << endl;
 							displayStudentInfo(arr->students[i]);
 
 						}
@@ -1250,7 +1288,7 @@ int main() {
 				}
 				else {
 					cout << ">>> Error: No student found with Student ID " << targetID << endl;
-					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "------------------------------------------------------------------------------------" << endl;
 				}
 			}
 			else {
@@ -1262,11 +1300,11 @@ int main() {
 				int index = linearSearchByName(*arr, targetName);
 
 				if (index != -1) {
-					cout << "Match found at index " << index << ":" << endl;
+					cout << endl << ">>> First match at index " << index << ":" << endl;
 					// display all students with the same name
 					for (int i = index; i < arr->count; i++) {
 						if (strcmp(arr->students[i].fullName, targetName) == 0) {
-							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							cout << "------------------------------------------------------------------------------------" << endl;
 							displayStudentInfo(arr->students[i]);
 
 						}
@@ -1277,8 +1315,8 @@ int main() {
 					}
 				}
 				else {
-					cout << ">>> Error: No student found with name " << targetName << endl;
-					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "[!] Error: No student found with name " << targetName << endl;
+					cout << "------------------------------------------------------------------------------------" << endl;
 
 				}
 			}
@@ -1292,7 +1330,7 @@ int main() {
 		{
 			// check if there are any student records to sort
 			if (arr->count == 0) {
-				cout << "Error: No student records to sort." << endl;
+				cout << "[!] Error: No student records to sort." << endl;
 				break;
 
 			}
@@ -1314,7 +1352,7 @@ int main() {
 
 				}
 
-				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
+				cout << "[!] Error: Invalid choice. Please enter 1, 2 or 3." << endl;
 			}
 
 			if (sortChoice == 1) {
@@ -1329,7 +1367,7 @@ int main() {
 				break;
 			}
 			else {
-				cout << "Error: Invalid choice. Please enter 1 or 2." << endl;
+				cout << "[!] Error: Invalid choice. Please enter 1 or 2." << endl;
 			}
 
 			cout << "Do you want to display all records? (1 = Yes, 2 = No): ";
@@ -1350,7 +1388,7 @@ int main() {
 		{
 			// check if there are any student records to search
 			if (arr->count == 0) {
-				cout << "Error: No student records to search." << endl;
+				cout << "[!] Error: No student records to search." << endl;
 				break;
 
 			}
@@ -1372,7 +1410,7 @@ int main() {
 
 				}
 
-				cout << "Error: Invalid choice. Please enter 1, 2 or 3." << endl;
+				cout << "[!] Error: Invalid choice. Please enter 1, 2 or 3." << endl;
 			} 
 
 			if (searchChoice == 1) {
@@ -1392,7 +1430,7 @@ int main() {
 					// display all students with the same Student ID
 					for (int i = index; i < arr->count; i++) {
 						if (strcmp(arr->students[i].studentID, targetID) == 0) {
-							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							cout << "------------------------------------------------------------------------------------" << endl;
 							displayStudentInfo(arr->students[i]);
 
 						}
@@ -1404,8 +1442,8 @@ int main() {
 
 				}
 				else {
-					cout << ">>> Error: No student found with Student ID " << targetID << endl;
-					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "[!] Error: No student found with Student ID " << targetID << endl;
+					cout << "------------------------------------------------------------------------------------" << endl;
 
 				}
 
@@ -1427,7 +1465,7 @@ int main() {
 					// display all students with the same name
 					for (int i = index; i < arr->count; i++) {
 						if (strcmp(arr->students[i].fullName, targetName) == 0) {
-							cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+							cout << "------------------------------------------------------------------------------------" << endl;
 							displayStudentInfo(arr->students[i]);
 
 						}
@@ -1443,8 +1481,8 @@ int main() {
 
 				}
 				else {
-					cout << ">>> Error: No student found with name " << targetName << endl;
-					cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "[!] Error: No student found with name " << targetName << endl;
+					cout << "------------------------------------------------------------------------------------" << endl;
 
 				}
 
@@ -1462,7 +1500,7 @@ int main() {
 			char target[20];
 			cout << "Enter student ID to delete: ";
 			cin.getline(target, sizeof(target));
-			deleteByValue(*arr, target);
+			deleteByID(*arr, target);
 			break;
 
 		}
@@ -1487,7 +1525,7 @@ int main() {
 		// ---- Invalid option ----
 		default:
 		{
-			cout << "Error: Invalid option. Please select a number between 1 and 9." << endl;
+			cout << "[!] Error: Invalid option. Please select a number between 1 and 9." << endl;
 			break;
 
 		}
