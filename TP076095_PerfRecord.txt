@@ -1,0 +1,21 @@
+# CT077-3-2-DSTR (Data Structures) | Lab Work #1
+## Student Record Management System
+
+============================================================================================================================================================
+YOUR INDIVIDUAL PERFORMANCE RECORD TABLE 
+============================================================================================================================================================
+Fill in actual measured times at each n. Leave N/A where operation does not apply to your implementation type.
+
+Operation       | n=500  | n=2000 | n=8000  | n=3000 | Big-O   | Justification
+----------------|--------|--------|---------|--------|---------|---------------------------------------------------------------------------------------------
+Add/Insert      | 234.6  | 243.3  | 440.4   | 480.2  | O(1)    | Inserts a new record at the end of the array without shifting existing elements.
+Delete          | 178.4  | 365.6  | 463.0   | 699.7  | O(n)    | Searches for the student ID, then shifts subsequent elements left to fill the gap.
+Linear Search   | 1.975  | 7.869  | 22.738  | 78.328 | O(n)    | Checks each array element sequentially until the target record is found.
+Binary Search   | 0.083  | 0.090  | N/A     | N/A    | O(log n)| Searches a sorted array by repeatedly dividing the search range in half. 
+		|	 |	  |	    |	     |	       | (Requires the array to be sorted first.)
+Sort (CGPA)     | 1134   | 17339  | 184650  | 2882503| O(n²)   | Bubble sort repeatedly compares and swaps adjacent array elements until the array is sorted.
+Display All     | 1543755| 6506969| 28109709|99182902| O(n)    | Visits every array element once to display all student records.
+Count           | N/A    | N/A    | N/A     | N/A    | N/A     | N/A
+
+In your report's cross-member comparison section, all 4 members paste their completed tables — the group then discusses WHY times differ between members who 
+implemented the same data structure (e.g., M1 used Bubble Sort, M2 used Merge Sort — their n=30000 times will be dramatically different, directly proving Big-O).
