@@ -1,27 +1,27 @@
- //===================================================================================================================
- //Module Code: CT077-3-2-DSTR (Data Structures)
- //System Name: Student Record Management System
- //Intake Code: APD2F2511CS(DA)
- //Lecturer Name: Dr. Masrina Akmal Binti Salleh
- //Student Name: Cheong Teng Wei
- //TP Number: TP076095
- //Hand Out Date: 11th May 2026 (Week 4)
- //Hand In Date: 29th June 2026 (Week 9)
- //Group: 9
+ // ==================================================================================================================
+ // Module Code: CT077-3-2-DSTR (Data Structures)
+ // System Name: Student Record Management System
+ // Intake Code: APD2F2511CS(DA)
+ // Lecturer Name: Dr. Masrina Akmal Binti Salleh
+ // Student Name: Cheong Teng Wei
+ // TP Number: TP076095
+ // Hand Out Date: 11th May 2026 (Week 4)
+ // Hand In Date: 3rd July 2026 (Week 10)
+ // Group: 9
  //
- //Data Structure Used: Array
- //Algorithms Used: 
- //1.  Append to End
- //2.  Delete by Value
- //3.  Insertion Sort by Student ID
- //4.  Insertion Sort by Name
- //5.  Insertion Sort by CGPA Ascending
- //6.  Insertion Sort by CGPA Descending
- //7.  Binary Search by Student ID
- //8.  Binary Search by Name
- //9.  Linear Search by Student ID
- //10. Linear Search by Name
- //===================================================================================================================
+ // Data Structure Used: Array
+ // Algorithms Used: 
+ // 1.  Append to End
+ // 2.  Delete by Value
+ // 3.  Insertion Sort by Student ID
+ // 4.  Insertion Sort by Name
+ // 5.  Insertion Sort by CGPA Ascending
+ // 6.  Insertion Sort by CGPA Descending
+ // 7.  Binary Search by Student ID
+ // 8.  Binary Search by Name
+ // 9.  Linear Search by Student ID
+ // 10. Linear Search by Name
+ // ==================================================================================================================
 
 #define _CRT_SECURE_NO_WARNINGS // removes the warning of strcpy
 
@@ -44,6 +44,7 @@ const int maxStudents = 35000;
 // Student struct:
 // stores the details of a student
 // ===================================================================================================================
+
 struct Student {
 	char studentID[20]; // set student id to 20 characters
 	char fullName[50]; // set full name to 50 characters
@@ -54,12 +55,35 @@ struct Student {
 
 };
 
+// ===================================================================================================================
+// Programme struct:
+// stores the details of a programme loaded from programmes.csv
+// ===================================================================================================================
 
+struct Programme {
+	char code[10];
+	char name[100];
+	char faculty[80];
+	int durationYears;
+};
+
+// ===================================================================================================================
+// ProgrammeArray struct:
+// stores all available programmes
+// ===================================================================================================================
+
+const int maxProgrammes = 100;
+
+struct ProgrammeArray {
+	Programme programmes[maxProgrammes];
+	int count;
+};
 
 // ===================================================================================================================
 // displayStudentInfo() function:
 // print the details of a student
 // ===================================================================================================================
+
 void displayStudentInfo(const Student& student) {
 
 	// check if student ID is empty
@@ -76,8 +100,6 @@ void displayStudentInfo(const Student& student) {
 
 	}
 
-
-
 	cout << "Student ID: " << student.studentID << endl;
 	cout << "Full Name: " << student.fullName << endl;
 	cout << "Programme: " << student.programme << endl;
@@ -87,27 +109,24 @@ void displayStudentInfo(const Student& student) {
 
 }
 
-
-
-
 // ===================================================================================================================
 // StudentArray struct:
 // A simple container that contains 
 // - a fixed array to store data (students)
 // - a counter to track usage (count)
 // ===================================================================================================================
+
 struct StudentArray {
 	Student students[maxStudents]; // act as database to store student records
 	int count; // number of students currently stored in the array
 
 };
 
-
-
 // ===================================================================================================================
 // checkStudentID() function:
 // check for duplicate student ID 
 // ===================================================================================================================
+
 bool checkStudentID(const StudentArray& arr, const char* id) {
 	for (int i = 0; i < arr.count; i++) {
 		// compare the student id in the array with the given id
@@ -122,12 +141,62 @@ bool checkStudentID(const StudentArray& arr, const char* id) {
 
 }
 
+// ===================================================================================================================
+// checkTPNumber() function:
+// validates if the student ID follows the format TPXXXXXX
+// must start with "TP" followed by exactly 6 digits
+// valid example: TP076095
+// ===================================================================================================================
 
+bool checkTPNumber(const char* id) {
+	// must be exactly 8 characters
+	if (strlen(id) != 8) return false;
+
+	// first 2 characters must be "TP"
+	if (id[0] != 'T' || id[1] != 'P') return false;
+
+	// remaining 6 characters must all be digits
+	for (int i = 2; i < 8; i++) {
+		if (!isdigit(id[i])) return false;
+	}
+
+	return true;
+}
+
+// ===================================================================================================================
+// checkContactNumber() function:
+// validates if the contact number follows Malaysian format XXX-XXXXXXXX
+// prefix must be 3 digits, followed by a dash, followed by 7 or 8 digits
+// valid examples: 011-12345678, 012-3456789
+// ===================================================================================================================
+
+bool checkContactNumber(const char* contact) {
+	int len = strlen(contact);
+
+	// total length must be 11 (3 + 1 + 7) or 12 (3 + 1 + 8)
+	if (len < 11 || len > 12) return false;
+
+	// first 3 characters must be digits
+	for (int i = 0; i < 3; i++) {
+		if (!isdigit(contact[i])) return false;
+	}
+
+	// 4th character must be a dash
+	if (contact[3] != '-') return false;
+
+	// remaining characters must all be digits
+	for (int i = 4; i < len; i++) {
+		if (!isdigit(contact[i])) return false;
+	}
+
+	return true;
+}
 
 // ===================================================================================================================
 // checkCGPA() function:
 // validates if the CGPA is between 0.0 and 4.0
 // ===================================================================================================================
+
 bool checkCGPA(double cgpa) {
 	if (cgpa < 0.0 || cgpa > 4.0) {
 		return false; // invalid CGPA
@@ -137,8 +206,6 @@ bool checkCGPA(double cgpa) {
 	return true; // valid CGPA
 
 }
-
-
 
 // ===================================================================================================================
 // Algorithm 1: Append New Student Record to End
@@ -252,7 +319,6 @@ int linearSearchByName(const StudentArray& arr, const char* target) {
 
 }
 
-
 // ===================================================================================================================
 // Algorithm 4: Insertion Sort By Student ID
 // 
@@ -331,11 +397,9 @@ void insertionSortByName(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << ">>>Students sorted by name successfully." << endl;
+	cout << ">>> Students sorted by name successfully." << endl;
 
 }
-
-
 
 // ===================================================================================================================
 // Algorithm 6: Insertion Sort By CGPA (Ascending)
@@ -417,11 +481,9 @@ void insertionSortDescending(StudentArray& arr) {
 	}
 
 	// display success message
-	cout << ">>>Students sorted by CGPA (Descending) successfully." << endl;
+	cout << ">>> Students sorted by CGPA (Descending) successfully." << endl;
 
 }
-
-
 
 // keep insertionSort() as an alias for ascending 
 // used internally by performance test
@@ -642,8 +704,6 @@ void displayAllRecords(const StudentArray& arr) {
 
 }
 
-
-
 // ===================================================================================================================
 // loadFromCSV() function:
 // Opens a CSV file and reads each student row one by one.
@@ -738,8 +798,116 @@ int loadFromCSV(StudentArray& arr, const string& filename) {
 
 }
 
+// ===================================================================================================================
+// loadProgrammesFromCSV() function:
+// reads programmes.csv and stores each row into the ProgrammeArray
+// ===================================================================================================================
+void loadProgrammesFromCSV(ProgrammeArray& pArr, const string& filename) {
+	// open the CSV file
+	fstream file;
+	file.open(filename, ios::in);
 
+	// check if the file is opened
+	if (!file.is_open()) {
+		cout << "[!] Warning: Could not open " << filename << ". Programme dropdown will not be available." << endl;
+		return;
+	}
 
+	string line;
+	bool isFirstLine = true;
+
+	// read the file line by line
+	while (getline(file, line)) {
+		// skip the header row
+		if (isFirstLine) {
+			isFirstLine = false;
+			continue;
+		}
+
+		// skip empty lines
+		if (line.empty()) {
+			cout << "[!] Warning: Skipping empty line in " << filename << endl;
+			continue;
+		}
+
+		// split the line using comma
+		stringstream ss(line);
+		string code, name, faculty, duration;
+
+		getline(ss, code, ',');
+		getline(ss, name, ',');
+		getline(ss, faculty, ',');
+		getline(ss, duration, ',');
+
+		// check for missing required fields
+		if (code.empty() || name.empty()) {
+			cout << "[!] Warning: Skipping line with missing fields: " << line << endl;
+			continue;
+		}
+
+		if (pArr.count >= maxProgrammes) {
+			cout << "[!] Warning: Maximum number of programmes reached." << endl;
+			break;
+		}
+
+		// create a new Programme object and store the data
+		Programme programme;
+		strncpy(programme.code, code.c_str(), sizeof(programme.code) - 1);
+		strncpy(programme.name, name.c_str(), sizeof(programme.name) - 1);
+		strncpy(programme.faculty, faculty.c_str(), sizeof(programme.faculty) - 1);
+		programme.durationYears = duration.empty() ? 0 : stoi(duration);
+
+		pArr.programmes[pArr.count++] = programme;
+	}
+
+	// close the file and display summary
+	file.close();
+	cout << ">>> Loaded " << pArr.count << " programmes from " << filename << endl;
+}
+
+// ===================================================================================================================
+// selectProgramme() function:
+// shows a numbered list of programmes and returns the chosen programme code
+// returns false if user cancels
+// ===================================================================================================================
+bool selectProgramme(const ProgrammeArray& pArr, char* outCode, int& outDuration) {
+	// check if programme list is empty
+	if (pArr.count == 0) {
+		cout << "[!] No programme list loaded. Please enter programme code manually: ";
+		cin.getline(outCode, 10);
+		outDuration = 0;
+		return true;
+	}
+
+	cout << endl << "  Select Programme:" << endl;
+
+	// display the list of programmes
+	for (int i = 0; i < pArr.count; i++) {
+		cout << "  " << right << setw(3) << i + 1 << ". "
+			<< left << setw(8) << pArr.programmes[i].code
+			<< pArr.programmes[i].name << endl;
+	}
+
+	cout << "   " << pArr.count + 1 << ". Back to main menu" << endl;
+
+	// prompt user for choice
+	int choice;
+	while (true) {
+		cout << "  Enter choice (1-" << pArr.count + 1 << "): ";
+		cin >> choice;
+		cin.ignore();
+
+		if (choice == pArr.count + 1) return false; // user cancelled
+
+		if (choice >= 1 && choice <= pArr.count) {
+			strncpy(outCode, pArr.programmes[choice - 1].code, 9);
+			outDuration = pArr.programmes[choice - 1].durationYears;
+			return true;
+		}
+
+		cout << "  [!] Invalid choice. Please try again." << endl;
+	}
+}
 
 // ===================================================================================================================
 // runEdgeCaseTest() function:
@@ -816,8 +984,6 @@ void runEdgeCaseTest() {
 		
 }
 
-
-
 // ===================================================================================================================
 // runPerformanceTest() function:
 // This function is used to measure the execution time of the four operations:
@@ -865,7 +1031,7 @@ void runPerformanceTest() {
 			break;
 		}
 
-		cout << "[!]Error: Invalid choice. Please enter a number between 1 and 5." << endl;
+		cout << "[!] Error: Invalid choice. Please enter a number between 1 and 5." << endl;
 
 	}
 
@@ -888,7 +1054,7 @@ void runPerformanceTest() {
 
 	// check if data is loaded successfully
 	if (arr->count == 0) {
-		cout << "[!] Error: No data loaded from " << files[index] << ". Skipping performane test for this dataset." << endl;
+		cout << "[!] Error: No data loaded from " << files[index] << ". Skipping performance test for this dataset." << endl;
 		delete arr; // free memory allocated for the array
 		return; 
 
@@ -896,11 +1062,7 @@ void runPerformanceTest() {
 
 	// ---- Display all Records ----
 	auto start1 = high_resolution_clock::now();
-
-	for (int i = 0; i < arr->count; i++) {
-		// traverse the array without printing
-		volatile char* id = (volatile char*)arr->students[i].studentID;
-	}
+	displayAllRecords(*arr);
 	auto end1 = high_resolution_clock::now();
 	auto duration1 = duration_cast<microseconds>(end1 - start1);
 		
@@ -1079,7 +1241,7 @@ void runPerformanceTest() {
 	cout << "Insertion Sort by CGPA       : " << duration5.count() << " microseconds" << endl; 
 	cout << "Binary Search by Student ID  : " << duration6.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
 	cout << "Binary Search by Name        : " << duration7.count() / 3000.0 << " microseconds (average of 3 targets x 1000 runs)" << endl;
-	cout << "Delete student by Student ID : " << duration8.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
+	cout << "Delete by Student ID         : " << duration8.count() / 10.0 << " microseconds (average of 10 deletes)" << endl;
 	cout << "------------------------------------------------------------------------------------" << endl;
 
 	delete arr; // free memory allocated for the array
@@ -1089,8 +1251,6 @@ void runPerformanceTest() {
 	cout << "====================================================================================" << endl;
 
 }
-
-
 
 // ===================================================================================================================
 // menu() function:
@@ -1122,6 +1282,10 @@ int main() {
 	// create an instance of StudentArray to store student records
 	StudentArray* arr = new StudentArray();
 	int choice = 0;
+
+	// load programmes from CSV file
+	ProgrammeArray pArr = {};
+	loadProgrammesFromCSV(pArr, "programmes.csv");
 
 	// loop until user chooses to exit
 	while (true) {
@@ -1202,31 +1366,62 @@ int main() {
 		// ---- Add a new student ----
 		case 3:
 		{
-			// prompt user to enter student details
-			Student newStudent;
-			cout << "  Student ID    : ";
-			cin.getline(newStudent.studentID, sizeof(newStudent.studentID));
+			Student newStudent = {};
 
-			cout << "  Student Name  : ";
+			cout << endl;
+			while (true) {
+				cout << "  " << left << setw(20) << "Student ID" << " : ";
+				cin.getline(newStudent.studentID, sizeof(newStudent.studentID));
+
+				if (checkTPNumber(newStudent.studentID)) {
+					break;
+				}
+
+				cout << "  [!] Invalid format. Please use TPXXXXXX (e.g. TP012345)" << endl;
+			}
+
+			cout << "  " << left << setw(20) << "Student Name" << " : ";
 			cin.getline(newStudent.fullName, sizeof(newStudent.fullName));
 
-			cout << "  Programme     : ";
-			cin.getline(newStudent.programme, sizeof(newStudent.programme));
+			// dynamic programme selection
+			int programmeDuration = 0;
+			bool selected = selectProgramme(pArr, newStudent.programme, programmeDuration);
+			if (!selected) {
+				cout << ">>> Add student cancelled." << endl;
+				break;
+			}
 
-			cout << "  Year of Study : ";
-			cin >> newStudent.yearOfStudy;
+			cout << "  " << left << setw(20) << "Selected Programme" << " : " << newStudent.programme << endl;
 
-			cout << "  CGPA          : ";
+			// auto-fill year of study from programme duration
+			if (programmeDuration > 0) {
+				newStudent.yearOfStudy = programmeDuration;
+				cout << "  " << left << setw(20) << "Year of Study" << " : " << newStudent.yearOfStudy << endl;
+			}
+			else {
+				cout << "  " << left << setw(20) << "Year of Study" << " : ";
+				cin >> newStudent.yearOfStudy;
+				cin.ignore();
+			}
+
+			cout << "  " << left << setw(20) << "CGPA" << " : ";
 			cin >> newStudent.cgpa;
+			cin.ignore();
 
-			cin.ignore(); // clear newline from input buffer
+			while (true) {
+				cout << "  " << left << setw(20) << "Contact Number" << " : ";
+				cin.getline(newStudent.contactNumber, sizeof(newStudent.contactNumber));
 
-			cout << "  Contact Number: ";
-			cin.getline(newStudent.contactNumber, sizeof(newStudent.contactNumber));
+				if (checkContactNumber(newStudent.contactNumber)) {
+					break;
+				}
 
+				cout << "  [!] Invalid format. Please use XXX-XXXXXXXX (e.g. 011-12345678)" << endl;
+			}
+
+			cout << endl;
 			appendToEnd(*arr, newStudent);
 			break;
-
 		}
 
 		// ---- Linear search by Student ID or Name ----

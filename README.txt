@@ -75,12 +75,12 @@ Print all student records currently loaded in the system.
 
 ### Option 3 - Add a new student
 Manually enter a new student record with the following fields:
-  - Student ID
+  - Student ID (begin with TP, followed by 6 digits)
   - Full Name
-  - Programme
-  - Year of Study
+  - Programme (select 1-26 from the programme list)
+  - Year of Study (autofilled based on the programme chosen)
   - CGPA
-  - Contact Number
+  - Contact Number (follow Malaysian format XXX-XXXXXXXX e.g. 011-12345678)
 
 ### Option 4 - Linear search by Student ID or Name
 Search for a student record using Linear Search. You will be prompted to choose:
@@ -123,8 +123,10 @@ The Edge Case Test covers the following scenarios:
   - Edge Case 3: Insert a student with CGPA = 0.00 (minimum boundary)
   - Edge Case 4: Binary search for a non-existent Student ID
   - Edge Case 5: Binary search for a non-existent student name
-  - Edge Case 6: Delete a record twice (duplicate delete)
-  - Edge Case 7: Insert 1 record, delete it, then display (empty-after-delete)
+  - Edge Case 6: Linear search for a non-existent Student ID
+  - Edge Case 7: Linear search for a non-existent student name
+  - Edge Case 8: Delete a record twice (duplicate delete)
+  - Edge Case 9: Insert 1 record, delete it, then display (empty-after-delete)
 
 The edge case test results are displayed before the dataset selection prompt.
 
@@ -141,7 +143,7 @@ WARNING: Always load a dataset (Option 1) before using any other options.
   - Sort (Option 5) will prompt whether to sort Ascending or Descending, and whether to display all records after sorting
   - Binary Search (Option 6) will automatically re-sort the array before searching, which will change the current record order
   - Performance Test (Option 8) loads its own separate copy of the dataset and will not affect records currently loaded
-  - Performance Test (Option 8) automatically runs an Edge Case Test (7 cases) before prompting for a dataset
+  - Performance Test (Option 8) automatically runs an Edge Case Test (9 cases) before prompting for a dataset
   - CGPA must be between 0.0 and 4.0
   - Duplicate Student IDs are not allowed
 
