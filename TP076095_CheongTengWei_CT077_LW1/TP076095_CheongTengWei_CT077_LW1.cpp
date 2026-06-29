@@ -1404,14 +1404,31 @@ int main() {
 				cin.ignore();
 			}
 
-			cout << "  " << left << setw(20) << "CGPA" << " : ";
-			cin >> newStudent.cgpa;
-			cin.ignore();
+			while (true) {
+				cout << "  " << left << setw(20) << "CGPA" << " : ";
+
+				// validate CGPA input
+				if (cin >> newStudent.cgpa) {
+					cin.ignore();
+
+					// validate CGPA range
+					if (checkCGPA(newStudent.cgpa)) {
+						break;
+					}
+					cout << "  [!] Invalid CGPA. Please enter a value between 0.0 and 4.0." << endl;
+				}
+				else {
+					cin.clear();          // clear the failed state
+					cin.ignore(1000, '\n'); // flush the bad input from the buffer
+					cout << "  [!] Invalid input. Please enter a number between 0.0 and 4.0." << endl;
+				}
+			}
 
 			while (true) {
 				cout << "  " << left << setw(20) << "Contact Number" << " : ";
 				cin.getline(newStudent.contactNumber, sizeof(newStudent.contactNumber));
 
+				// validate contact number format
 				if (checkContactNumber(newStudent.contactNumber)) {
 					break;
 				}
