@@ -12,7 +12,7 @@ Add/Insert      | 234.6  | 243.3  | 440.4   | 480.2  | O(1)    | Inserts a new r
 Delete          | 178.4  | 365.6  | 463.0   | 699.7  | O(n)    | Searches for the student ID, then shifts subsequent elements left to fill the gap.
 Linear Search   | 1.975  | 7.869  | 22.738  | 78.328 | O(n)    | Checks each array element sequentially until the target record is found.
 Binary Search   | 0.083  | 0.090  | N/A     | N/A    | O(log n)| Searches a sorted array by repeatedly dividing the search range in half. 
-		|	 |	  |	    |	     |	       | (Requires the array to be sorted first.)
+		        |	     |	      |	        |	     |	       | (Requires the array to be sorted first.)
 Sort (CGPA)     | 1134   | 17339  | 184650  | 2882503| O(n²)   | Bubble sort repeatedly compares and swaps adjacent array elements until the array is sorted.
 Display All     | 1543755| 6506969| 28109709|99182902| O(n)    | Visits every array element once to display all student records.
 Count           | N/A    | N/A    | N/A     | N/A    | N/A     | N/A
